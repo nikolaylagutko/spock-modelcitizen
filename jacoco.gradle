@@ -1,3 +1,7 @@
+/**
+ * Jacoco configuration
+ */
+
 apply plugin: "jacoco"
 
 jacoco {

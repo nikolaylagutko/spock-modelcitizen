@@ -1,3 +1,7 @@
+/**
+ * Coniguration Eclipse preferences
+ */
+
 apply plugin: 'eclipse'
 
 task eclipseSettings(type: Copy) {
