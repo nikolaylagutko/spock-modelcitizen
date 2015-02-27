@@ -16,7 +16,8 @@
 package org.gerzog.spock.modelcitizen;
 
 import java.util.Arrays;
-import java.util.stream.Stream;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.gerzog.spock.modelcitizen.api.Model;
 import org.gerzog.spock.modelcitizen.api.UseBlueprints;
@@ -39,19 +40,19 @@ public class ModelCitizenExtension extends AbstractAnnotationDrivenExtension<Use
 		ModelFactory factory = new ModelFactory();
 
 		initializeBlueprints(factory, annotation, spec);
-		initializeModels(factory, spec);
+		registerInterceptor(factory, spec);
 	}
 
-	private void initializeModels(final ModelFactory factory, final SpecInfo spec) {
-		initializeModels(factory, getModelFields(spec));
+	private void registerInterceptor(final ModelFactory factory, final SpecInfo spec) {
+		List<FieldInfo> modelFields = getModelFields(spec);
+
+		validateModelFields(modelFields);
+
+		spec.addInterceptor(new ModelCitizenMethodInterceptor(factory, modelFields));
 	}
 
-	private void initializeModels(final ModelFactory factory, final Stream<FieldInfo> modelFiels) {
-		modelFiels.forEach(field -> initializeModel(factory, field));
-	}
-
-	private void initializeModel(final ModelFactory factory, final FieldInfo modelField) {
-		validateModelField(modelField);
+	private void validateModelFields(final List<FieldInfo> modelFields) {
+		modelFields.forEach(this::validateModelField);
 	}
 
 	private void validateModelField(final FieldInfo modelField) {
@@ -60,8 +61,8 @@ public class ModelCitizenExtension extends AbstractAnnotationDrivenExtension<Use
 		}
 	}
 
-	private Stream<FieldInfo> getModelFields(final SpecInfo spec) {
-		return spec.getAllFields().stream().filter(field -> field.isAnnotationPresent(Model.class));
+	private List<FieldInfo> getModelFields(final SpecInfo spec) {
+		return spec.getAllFields().stream().filter(field -> field.isAnnotationPresent(Model.class)).collect(Collectors.toList());
 	}
 
 	private void initializeBlueprints(final ModelFactory factory, final UseBlueprints annotation, final SpecInfo spec) {

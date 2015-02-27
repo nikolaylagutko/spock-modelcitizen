@@ -21,6 +21,7 @@ import org.gerzog.spock.modelcitizen.test.data.blueprints1.AnotherBeanBlueprint
 import org.gerzog.spock.modelcitizen.test.data.blueprints1.BeanBlueprint
 import org.gerzog.spock.modelcitizen.test.data.blueprints2.ThirdBeanBlueprint
 import org.gerzog.spock.modelcitizen.test.specs.ModelWithDef
+import org.gerzog.spock.modelcitizen.test.specs.SampleSpec
 import org.gerzog.spock.modelcitizen.test.specs.UseBlueprintsWithClasses
 import org.gerzog.spock.modelcitizen.test.specs.UseBlueprintsWithNoBlueprintClass
 import org.gerzog.spock.modelcitizen.test.specs.UseBlueprintsWithPackageScan
@@ -101,6 +102,21 @@ class ModelCitizenExtensionSpec extends Specification {
 		thrown(InvalidSpecException)
 	}
 
+	def "check methot interceptor was applied"(){
+		setup:
+		def spec = spec(SampleSpec)
+		def fields = modelFields(spec)
+
+		setupModelFactoryMock()
+		setupInterceptorMock(fields)
+
+		when:
+		applyExtension(SampleSpec, spec)
+
+		then:
+		PowerMockito.verifyNew(ModelCitizenMethodInterceptor).withArguments(modelFactory, fields)
+	}
+
 	private void validateBlueprints(blueprintClasses) {
 		assert modelFactory.blueprints.size() == blueprintClasses.size()
 
@@ -113,6 +129,10 @@ class ModelCitizenExtensionSpec extends Specification {
 		modelFactory.blueprints.findResult {
 			blueprintClass.isInstance(it) ? blueprintClass : null
 		}
+	}
+
+	private setupInterceptorMock(fields) {
+		PowerMockito.whenNew(ModelCitizenMethodInterceptor).withArguments(modelFactory, fields).thenReturn(new ModelCitizenMethodInterceptor(modelFactory, fields))
 	}
 
 	private setupModelFactoryMock() {
@@ -136,6 +156,6 @@ class ModelCitizenExtensionSpec extends Specification {
 	}
 
 	private modelFields(spec) {
-		allFields(spec).filter(isAnnotationPresent(Model))
+		allFields(spec).findAll {it.isAnnotationPresent(Model)}
 	}
 }
