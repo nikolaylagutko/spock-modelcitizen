@@ -2,8 +2,8 @@
  * Configuration publishing of artifacts to corresponding repo
  */
 
-apply from: 'ojo.gradle'
-apply from: 'bintray.gradle'
+apply from: 'gradle/custom/ojo.gradle'
+apply from: 'gradle/custom/bintray.gradle'
 
 task publishToRepo() {
 }

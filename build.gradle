@@ -21,10 +21,10 @@ apply plugin: 'groovy'
 apply plugin: 'com.github.ben-manes.versions'
 apply plugin: 'com.github.kt3k.coveralls'
 
-apply from: 'ide-java.gradle'
-apply from: 'licence.gradle'
-apply from: 'jacoco.gradle'
-apply from: 'publish.gradle'
+apply from: 'gradle/custom/ide-java.gradle'
+apply from: 'gradle/custom/licence.gradle'
+apply from: 'gradle/custom/jacoco.gradle'
+apply from: 'gradle/custom/publish.gradle'
 
 
 repositories {
