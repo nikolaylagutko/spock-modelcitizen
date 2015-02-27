@@ -4,9 +4,10 @@ buildscript {
 	}
 	
 	dependencies {
-		classpath group: 'com.github.ben-manes',		name: 'gradle-versions-plugin',	version: gradleVersionsVersion
-		classpath group: 'nl.javadude.gradle.plugins',	name: 'license-gradle-plugin',	version: gradleLicenceVersion
+		classpath group: 'com.github.ben-manes',		name: 'gradle-versions-plugin',		version: gradleVersionsVersion
+		classpath group: 'nl.javadude.gradle.plugins',	name: 'license-gradle-plugin',		version: gradleLicenceVersion
 		classpath group: 'org.kt3k.gradle.plugin',		name: 'coveralls-gradle-plugin',	version: gradleCoverallsVersion
+		classpath group: 'net.saliman',					name: 'gradle-cobertura-plugin',	version: gradleCoberturaVersion
 	}
 }
 
@@ -17,7 +18,7 @@ apply plugin: 'com.github.kt3k.coveralls'
 
 apply from: 'ide-java.gradle'
 apply from: 'licence.gradle'
-apply from: 'jacoco.gradle'
+apply from: 'cobertura.gradle'
 
 
 repositories {
@@ -36,8 +37,8 @@ dependencies {
 	testCompile group: 'org.powermock',			name: 'powermock-module-junit4',		version: powermockVersion
 	testCompile group: 'org.powermock',			name: 'powermock-module-junit4-rule',	version: powermockVersion
 	testCompile group: 'org.powermock',			name: 'powermock-api-mockito',			version: powermockVersion
-	testCompile group: 'org.powermock',			name: 'powermock-classloading-xstream',	version: powermockVersion
-	testCompile group: 'cglib',					name: 'cglib',							version: cglibVersion
+	testCompile group: 'org.powermock',			name: 'powermock-classloading-xstream',	version: powermockVersion	
+	testCompile group: 'cglib',					name: 'cglib',							version: cglibVersion	
 }
 
 test {

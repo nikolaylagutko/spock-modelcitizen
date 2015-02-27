@@ -1,0 +1,4 @@
+apply plugin: "net.saliman.cobertura"
+
+cobertura.coberturaVersion = coberturaVersion
+cobertura.coverageFormats = ['html', 'xml']
