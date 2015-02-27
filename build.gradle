@@ -40,7 +40,7 @@ dependencies {
 }
 
 test {
-	exclude 'org.gerzog.spock.modelcitizen.test.specs'	
+	exclude 'org/gerzog/spock/modelcitizen/test/specs'	
 }
 
 task wrapper(type: Wrapper) {
