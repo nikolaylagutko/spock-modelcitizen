@@ -24,8 +24,7 @@ apply plugin: 'com.github.kt3k.coveralls'
 apply from: 'ide-java.gradle'
 apply from: 'licence.gradle'
 apply from: 'jacoco.gradle'
-apply from: 'bintray.gradle'
-apply from: 'ojo.gradle'
+apply from: 'publish.gradle'
 
 
 repositories {

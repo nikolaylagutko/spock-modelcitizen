@@ -60,8 +60,6 @@ bintray {
 		desc = 'ModelCitizen integration to Spock'
 		licenses = ['Apache-2.0']
 	}
-	
-	dryRun = version.endsWith("SNAPSHOT")
 }
 
 task install(dependsOn: 'publishMavenJavaPublicationToMavenLocal') << {

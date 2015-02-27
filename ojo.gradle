@@ -23,7 +23,6 @@ artifactory {
 		
 		defaults {
 			publications 'mavenJava'
-			skip = !version.endsWith('SNAPSHOT')
 			properties = [
 				'bintray.repo': 	'nikolaylagutko/spock-extensions',
 				'bintray.package': 	'spock-modelcitizen',
@@ -31,8 +30,4 @@ artifactory {
 			]			
 		}
 	}
-}
-
-artifactoryPublish {
-	skip = !version.endsWith('SNAPSHOT')	
 }
