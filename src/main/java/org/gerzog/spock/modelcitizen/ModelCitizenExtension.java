@@ -16,10 +16,13 @@
 package org.gerzog.spock.modelcitizen;
 
 import java.util.Arrays;
+import java.util.stream.Stream;
 
+import org.gerzog.spock.modelcitizen.api.Model;
 import org.gerzog.spock.modelcitizen.api.UseBlueprints;
 import org.spockframework.runtime.InvalidSpecException;
 import org.spockframework.runtime.extension.AbstractAnnotationDrivenExtension;
+import org.spockframework.runtime.model.FieldInfo;
 import org.spockframework.runtime.model.SpecInfo;
 
 import com.tobedevoured.modelcitizen.ModelFactory;
@@ -35,10 +38,33 @@ public class ModelCitizenExtension extends AbstractAnnotationDrivenExtension<Use
 	public void visitSpecAnnotation(final UseBlueprints annotation, final SpecInfo spec) {
 		ModelFactory factory = new ModelFactory();
 
-		initializeBlueprints(factory, annotation, spec.getName());
+		initializeBlueprints(factory, annotation, spec);
+		initializeModels(factory, spec);
 	}
 
-	private void initializeBlueprints(final ModelFactory factory, final UseBlueprints annotation, final String specName) {
+	private void initializeModels(final ModelFactory factory, final SpecInfo spec) {
+		initializeModels(factory, getModelFields(spec));
+	}
+
+	private void initializeModels(final ModelFactory factory, final Stream<FieldInfo> modelFiels) {
+		modelFiels.forEach(field -> initializeModel(factory, field));
+	}
+
+	private void initializeModel(final ModelFactory factory, final FieldInfo modelField) {
+		validateModelField(modelField);
+	}
+
+	private void validateModelField(final FieldInfo modelField) {
+		if (modelField.getType().equals(Object.class)) {
+			throw new InvalidSpecException("Object class was detected as @Model source. Please check you didn't use 'def' keyword to define @Model field");
+		}
+	}
+
+	private Stream<FieldInfo> getModelFields(final SpecInfo spec) {
+		return spec.getAllFields().stream().filter(field -> field.isAnnotationPresent(Model.class));
+	}
+
+	private void initializeBlueprints(final ModelFactory factory, final UseBlueprints annotation, final SpecInfo spec) {
 		try {
 			// register blueprints from classes
 			factory.setRegisterBlueprints(Arrays.asList(annotation.classes()));
@@ -48,7 +74,7 @@ public class ModelCitizenExtension extends AbstractAnnotationDrivenExtension<Use
 				factory.setRegisterBlueprintsByPackage(packageName);
 			}
 		} catch (RegisterBlueprintException e) {
-			throw new InvalidSpecException("An error occured during ModelCitizen initialization. Please check your @UseBlueprints configuration for " + specName + " spec", e);
+			throw new InvalidSpecException("An error occured during ModelCitizen initialization. Please check your @UseBlueprints configuration for " + spec.getName() + " spec", e);
 		}
 	}
 }

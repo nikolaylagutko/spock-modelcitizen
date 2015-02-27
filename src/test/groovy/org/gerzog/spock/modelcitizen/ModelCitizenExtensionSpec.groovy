@@ -20,6 +20,7 @@ import org.gerzog.spock.modelcitizen.api.UseBlueprints
 import org.gerzog.spock.modelcitizen.test.data.blueprints1.AnotherBeanBlueprint
 import org.gerzog.spock.modelcitizen.test.data.blueprints1.BeanBlueprint
 import org.gerzog.spock.modelcitizen.test.data.blueprints2.ThirdBeanBlueprint
+import org.gerzog.spock.modelcitizen.test.specs.ModelWithDef
 import org.gerzog.spock.modelcitizen.test.specs.UseBlueprintsWithClasses
 import org.gerzog.spock.modelcitizen.test.specs.UseBlueprintsWithNoBlueprintClass
 import org.gerzog.spock.modelcitizen.test.specs.UseBlueprintsWithPackageScan
@@ -87,6 +88,14 @@ class ModelCitizenExtensionSpec extends Specification {
 	def "check an exception thrown for incorrect model factory config"() {
 		when:
 		applyExtension(UseBlueprintsWithNoBlueprintClass)
+
+		then:
+		thrown(InvalidSpecException)
+	}
+
+	def "check an error occured for @Model applied to 'def' field"() {
+		when:
+		applyExtension(ModelWithDef)
 
 		then:
 		thrown(InvalidSpecException)
