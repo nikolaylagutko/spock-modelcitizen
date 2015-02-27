@@ -37,6 +37,7 @@ dependencies {
 	testCompile group: 'org.powermock',			name: 'powermock-module-junit4-rule',	version: powermockVersion
 	testCompile group: 'org.powermock',			name: 'powermock-api-mockito',			version: powermockVersion
 	testCompile group: 'org.powermock',			name: 'powermock-classloading-xstream',	version: powermockVersion
+	testCompile group: 'cglib',					name: 'cglib',							version: cglibVersion
 }
 
 test {

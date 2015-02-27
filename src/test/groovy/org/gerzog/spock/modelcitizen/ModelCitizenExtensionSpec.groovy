@@ -15,8 +15,8 @@
  */
 package org.gerzog.spock.modelcitizen
 
-import org.gerzog.spock.modelcitizen.api.Model
 import org.gerzog.spock.modelcitizen.api.UseBlueprints
+import org.gerzog.spock.modelcitizen.test.TestUtilsTrait
 import org.gerzog.spock.modelcitizen.test.data.blueprints1.AnotherBeanBlueprint
 import org.gerzog.spock.modelcitizen.test.data.blueprints1.BeanBlueprint
 import org.gerzog.spock.modelcitizen.test.data.blueprints2.ThirdBeanBlueprint
@@ -30,7 +30,6 @@ import org.powermock.api.mockito.PowerMockito
 import org.powermock.core.classloader.annotations.PrepareForTest
 import org.powermock.modules.junit4.rule.PowerMockRule
 import org.spockframework.runtime.InvalidSpecException
-import org.spockframework.runtime.SpecInfoBuilder
 
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -42,7 +41,7 @@ import com.tobedevoured.modelcitizen.ModelFactory
  *
  */
 @PrepareForTest(ModelCitizenExtension)
-class ModelCitizenExtensionSpec extends Specification {
+class ModelCitizenExtensionSpec extends Specification implements TestUtilsTrait {
 
 	@Rule
 	PowerMockRule powerMockRule = new PowerMockRule()
@@ -139,23 +138,11 @@ class ModelCitizenExtensionSpec extends Specification {
 		PowerMockito.whenNew(ModelFactory).withNoArguments().thenReturn(modelFactory)
 	}
 
-	private spec(specClass) {
-		new SpecInfoBuilder(specClass).build()
-	}
-
 	private applyExtension(specClass, spec = spec(specClass)) {
 		extension.visitSpecAnnotation(extractAnnotation(specClass), spec)
 	}
 
 	private extractAnnotation(clazz) {
 		clazz.getAnnotation(UseBlueprints)
-	}
-
-	private allFields(spec) {
-		spec.allFields
-	}
-
-	private modelFields(spec) {
-		allFields(spec).findAll {it.isAnnotationPresent(Model)}
 	}
 }
