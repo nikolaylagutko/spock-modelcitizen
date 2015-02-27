@@ -17,8 +17,8 @@ import org.spockframework.runtime.extension.ExtensionAnnotation;
 @ExtensionAnnotation(ModelCitizenExtension.class)
 public @interface UseBlueprints {
 
-	Class<?>[] classes();
+	Class<?>[] classes() default {};
 
-	String packageToScan() default "";
+	String packagesToScan() default "";
 
 }
