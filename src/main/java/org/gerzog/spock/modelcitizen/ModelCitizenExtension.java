@@ -15,9 +15,14 @@
  */
 package org.gerzog.spock.modelcitizen;
 
+import java.util.Arrays;
+
 import org.gerzog.spock.modelcitizen.api.UseBlueprints;
 import org.spockframework.runtime.extension.AbstractAnnotationDrivenExtension;
 import org.spockframework.runtime.model.SpecInfo;
+
+import com.tobedevoured.modelcitizen.ModelFactory;
+import com.tobedevoured.modelcitizen.RegisterBlueprintException;
 
 /**
  * @author Nikolay Lagutko (nikolay.lagutko@mail.com)
@@ -27,7 +32,22 @@ public class ModelCitizenExtension extends AbstractAnnotationDrivenExtension<Use
 
 	@Override
 	public void visitSpecAnnotation(final UseBlueprints annotation, final SpecInfo spec) {
+		try {
+			ModelFactory factory = new ModelFactory();
 
+			initializeBlueprints(factory, annotation);
+		} catch (RegisterBlueprintException e) {
+			e.printStackTrace();
+		}
 	}
 
+	private void initializeBlueprints(final ModelFactory factory, final UseBlueprints annotation) throws RegisterBlueprintException {
+		// register blueprints from classes
+		factory.setRegisterBlueprints(Arrays.asList(annotation.classes()));
+
+		// register blueprints from packages
+		for (String packageName : annotation.packagesToScan()) {
+			factory.setRegisterBlueprintsByPackage(packageName);
+		}
+	}
 }

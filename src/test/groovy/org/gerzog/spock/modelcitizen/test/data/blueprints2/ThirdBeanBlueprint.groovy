@@ -13,22 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.gerzog.spock.modelcitizen.test.specs
+package org.gerzog.spock.modelcitizen.test.data.blueprints2
 
-import org.gerzog.spock.modelcitizen.api.Model
-import org.gerzog.spock.modelcitizen.api.UseBlueprints
-import org.gerzog.spock.modelcitizen.test.data.Bean
-
-import spock.lang.Specification
-
+import com.tobedevoured.modelcitizen.annotation.Blueprint
 
 /**
  * @author Nikolay Lagutko (nikolay.lagutko@mail.com)
  *
  */
-@UseBlueprints(packagesToScan = 'org.gerzog.spock.modelcitizen.test.data')
-class CorrectAnnotationsPackageScan extends Specification {
-
-	@Model
-	Bean model
+@Blueprint(ThirdBeanBlueprint)
+class ThirdBeanBlueprint {
 }

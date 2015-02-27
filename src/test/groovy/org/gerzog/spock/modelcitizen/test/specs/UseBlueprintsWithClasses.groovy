@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2015 Nikolay Lagutko <nikolay.lagutko@mail.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,27 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.gerzog.spock.modelcitizen.api;
+package org.gerzog.spock.modelcitizen.test.specs
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import org.gerzog.spock.modelcitizen.api.Model
+import org.gerzog.spock.modelcitizen.api.UseBlueprints
+import org.gerzog.spock.modelcitizen.test.data.Bean
+import org.gerzog.spock.modelcitizen.test.data.blueprints1.AnotherBeanBlueprint
+import org.gerzog.spock.modelcitizen.test.data.blueprints2.ThirdBeanBlueprint
 
-import org.gerzog.spock.modelcitizen.ModelCitizenExtension;
-import org.spockframework.runtime.extension.ExtensionAnnotation;
+import spock.lang.Specification
+
 
 /**
  * @author Nikolay Lagutko (nikolay.lagutko@mail.com)
  *
  */
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-@ExtensionAnnotation(ModelCitizenExtension.class)
-public @interface UseBlueprints {
+@UseBlueprints(classes = [AnotherBeanBlueprint, ThirdBeanBlueprint])
+class UseBlueprintsWithClasses extends Specification {
 
-	Class<?>[] classes() default {};
-
-	String[] packagesToScan() default {};
-
+	@Model
+	Bean model
 }

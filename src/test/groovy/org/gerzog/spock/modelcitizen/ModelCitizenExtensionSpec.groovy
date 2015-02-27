@@ -17,38 +17,94 @@ package org.gerzog.spock.modelcitizen
 
 import org.gerzog.spock.modelcitizen.api.Model
 import org.gerzog.spock.modelcitizen.api.UseBlueprints
-import org.gerzog.spock.modelcitizen.test.specs.CorrectAnnotationsPackageScan
+import org.gerzog.spock.modelcitizen.test.data.blueprints1.AnotherBeanBlueprint
+import org.gerzog.spock.modelcitizen.test.data.blueprints1.BeanBlueprint
+import org.gerzog.spock.modelcitizen.test.data.blueprints2.ThirdBeanBlueprint
+import org.gerzog.spock.modelcitizen.test.specs.UseBlueprintsWithClasses
+import org.gerzog.spock.modelcitizen.test.specs.UseBlueprintsWithPackageScan
+import org.junit.Rule
+import org.powermock.api.mockito.PowerMockito
+import org.powermock.core.classloader.annotations.PrepareForTest
+import org.powermock.modules.junit4.rule.PowerMockRule
 import org.spockframework.runtime.SpecInfoBuilder
 
 import spock.lang.Specification
+import spock.lang.Unroll
+
+import com.tobedevoured.modelcitizen.ModelFactory
 
 /**
  * @author Nikolay Lagutko (nikolay.lagutko@mail.com)
  *
  */
+@PrepareForTest(ModelCitizenExtension)
 class ModelCitizenExtensionSpec extends Specification {
+
+	@Rule
+	PowerMockRule powerMockRule = new PowerMockRule()
 
 	def extension = new ModelCitizenExtension()
 
-	def "check actions on annotation applying"() {
+	def modelFactory = new ModelFactory()
+
+	def "check model factory was created"() {
 		setup:
-		def spec = spec(CorrectAnnotationsPackageScan)
+		setupModelFactoryMock()
 
 		when:
-		applyExtension(CorrectAnnotationsPackageScan, spec)
+		applyExtension(UseBlueprintsWithClasses)
 
 		then:
-		validateSpec()
+		PowerMockito.verifyNew(ModelFactory).withNoArguments()
 	}
 
-	void validateSpec() {
+	@Unroll("check blueprints initialized in model factory for #specClass")
+	def "check blueprints initialized in model factory"(specClass, blueprintClasses) {
+		setup:
+		setupModelFactoryMock()
+
+		when:
+		applyExtension(specClass)
+
+		then:
+		validateBlueprints(blueprintClasses)
+
+		where:
+		specClass 						| blueprintClasses
+		UseBlueprintsWithClasses 		| [
+			AnotherBeanBlueprint,
+			ThirdBeanBlueprint
+		]
+		UseBlueprintsWithPackageScan 	| [
+			BeanBlueprint,
+			AnotherBeanBlueprint,
+			ThirdBeanBlueprint
+		]
+	}
+
+	void validateBlueprints(blueprintClasses) {
+		assert modelFactory.blueprints.size() == blueprintClasses.size()
+
+		blueprintClasses.forEach {
+			assert findBlueprint(it) != null
+		}
+	}
+
+	def findBlueprint(blueprintClass) {
+		modelFactory.blueprints.findResult {
+			blueprintClass.isInstance(it) ? blueprintClass : null
+		}
+	}
+
+	def setupModelFactoryMock() {
+		PowerMockito.whenNew(ModelFactory).withNoArguments().thenReturn(modelFactory)
 	}
 
 	def spec(specClass) {
 		new SpecInfoBuilder(specClass).build()
 	}
 
-	def applyExtension(specClass, spec) {
+	def applyExtension(specClass, spec = spec(specClass)) {
 		extension.visitSpecAnnotation(extractAnnotation(specClass), spec)
 	}
 
