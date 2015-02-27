@@ -92,7 +92,7 @@ class ModelCitizenExtensionSpec extends Specification {
 		thrown(InvalidSpecException)
 	}
 
-	void validateBlueprints(blueprintClasses) {
+	private void validateBlueprints(blueprintClasses) {
 		assert modelFactory.blueprints.size() == blueprintClasses.size()
 
 		blueprintClasses.forEach {
@@ -100,33 +100,33 @@ class ModelCitizenExtensionSpec extends Specification {
 		}
 	}
 
-	def findBlueprint(blueprintClass) {
+	private findBlueprint(blueprintClass) {
 		modelFactory.blueprints.findResult {
 			blueprintClass.isInstance(it) ? blueprintClass : null
 		}
 	}
 
-	def setupModelFactoryMock() {
+	private setupModelFactoryMock() {
 		PowerMockito.whenNew(ModelFactory).withNoArguments().thenReturn(modelFactory)
 	}
 
-	def spec(specClass) {
+	private spec(specClass) {
 		new SpecInfoBuilder(specClass).build()
 	}
 
-	def applyExtension(specClass, spec = spec(specClass)) {
+	private applyExtension(specClass, spec = spec(specClass)) {
 		extension.visitSpecAnnotation(extractAnnotation(specClass), spec)
 	}
 
-	def extractAnnotation(clazz) {
+	private extractAnnotation(clazz) {
 		clazz.getAnnotation(UseBlueprints)
 	}
 
-	def allFields(spec) {
+	private allFields(spec) {
 		spec.allFields
 	}
 
-	def modelFields(spec) {
+	private modelFields(spec) {
 		allFields(spec).filter(isAnnotationPresent(Model))
 	}
 }
