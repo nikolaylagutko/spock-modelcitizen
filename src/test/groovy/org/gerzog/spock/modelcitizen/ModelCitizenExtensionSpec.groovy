@@ -21,11 +21,13 @@ import org.gerzog.spock.modelcitizen.test.data.blueprints1.AnotherBeanBlueprint
 import org.gerzog.spock.modelcitizen.test.data.blueprints1.BeanBlueprint
 import org.gerzog.spock.modelcitizen.test.data.blueprints2.ThirdBeanBlueprint
 import org.gerzog.spock.modelcitizen.test.specs.UseBlueprintsWithClasses
+import org.gerzog.spock.modelcitizen.test.specs.UseBlueprintsWithNoBlueprintClass
 import org.gerzog.spock.modelcitizen.test.specs.UseBlueprintsWithPackageScan
 import org.junit.Rule
 import org.powermock.api.mockito.PowerMockito
 import org.powermock.core.classloader.annotations.PrepareForTest
 import org.powermock.modules.junit4.rule.PowerMockRule
+import org.spockframework.runtime.InvalidSpecException
 import org.spockframework.runtime.SpecInfoBuilder
 
 import spock.lang.Specification
@@ -80,6 +82,14 @@ class ModelCitizenExtensionSpec extends Specification {
 			AnotherBeanBlueprint,
 			ThirdBeanBlueprint
 		]
+	}
+
+	def "check an exception thrown for incorrect model factory config"() {
+		when:
+		applyExtension(UseBlueprintsWithNoBlueprintClass)
+
+		then:
+		thrown(InvalidSpecException)
 	}
 
 	void validateBlueprints(blueprintClasses) {

@@ -18,6 +18,7 @@ package org.gerzog.spock.modelcitizen;
 import java.util.Arrays;
 
 import org.gerzog.spock.modelcitizen.api.UseBlueprints;
+import org.spockframework.runtime.InvalidSpecException;
 import org.spockframework.runtime.extension.AbstractAnnotationDrivenExtension;
 import org.spockframework.runtime.model.SpecInfo;
 
@@ -32,22 +33,22 @@ public class ModelCitizenExtension extends AbstractAnnotationDrivenExtension<Use
 
 	@Override
 	public void visitSpecAnnotation(final UseBlueprints annotation, final SpecInfo spec) {
-		try {
-			ModelFactory factory = new ModelFactory();
+		ModelFactory factory = new ModelFactory();
 
-			initializeBlueprints(factory, annotation);
-		} catch (RegisterBlueprintException e) {
-			e.printStackTrace();
-		}
+		initializeBlueprints(factory, annotation, spec.getName());
 	}
 
-	private void initializeBlueprints(final ModelFactory factory, final UseBlueprints annotation) throws RegisterBlueprintException {
-		// register blueprints from classes
-		factory.setRegisterBlueprints(Arrays.asList(annotation.classes()));
+	private void initializeBlueprints(final ModelFactory factory, final UseBlueprints annotation, final String specName) {
+		try {
+			// register blueprints from classes
+			factory.setRegisterBlueprints(Arrays.asList(annotation.classes()));
 
-		// register blueprints from packages
-		for (String packageName : annotation.packagesToScan()) {
-			factory.setRegisterBlueprintsByPackage(packageName);
+			// register blueprints from packages
+			for (String packageName : annotation.packagesToScan()) {
+				factory.setRegisterBlueprintsByPackage(packageName);
+			}
+		} catch (RegisterBlueprintException e) {
+			throw new InvalidSpecException("An error occured during ModelCitizen initialization. Please check your @UseBlueprints configuration for " + specName + " spec", e);
 		}
 	}
 }
