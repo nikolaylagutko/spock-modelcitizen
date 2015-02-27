@@ -33,7 +33,10 @@ dependencies {
 	
 	testCompile group: 'junit',					name: 'junit',		version: junitVersion
 	testCompile group: 'org.codehaus.groovy',	name: 'groovy-all',	version: groovyVersion	
-	
+}
+
+test {
+	exclude 'org.gerzog.spock.modelcitizen.test.specs'	
 }
 
 task wrapper(type: Wrapper) {
