@@ -43,6 +43,8 @@ public class ModelCitizenMethodInterceptor extends AbstractMethodInterceptor {
 	@Override
 	public void interceptFeatureMethod(final IMethodInvocation invocation) throws Throwable {
 		fields.forEach(field -> initializeModel(invocation.getTarget(), field));
+
+		invocation.proceed();
 	}
 
 	private void initializeModel(final Object target, final FieldInfo field) {

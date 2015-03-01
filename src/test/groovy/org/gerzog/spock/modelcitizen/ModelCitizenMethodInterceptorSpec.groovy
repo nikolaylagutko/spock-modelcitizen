@@ -81,6 +81,14 @@ class ModelCitizenMethodInterceptorSpec extends Specification implements TestUti
 		validateValue(spec)
 	}
 
+	def "check feature method was called after model initialization"() {
+		when:
+		callInterceptor(spec(SampleSpec))
+
+		then:
+		1 * invocation.proceed()
+	}
+
 	private void validateValue(spec) {
 		def modelField = modelFields(spec).findResult {it.name == 'model' ? it : null}
 
