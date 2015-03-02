@@ -1,7 +1,6 @@
 /**
  * Main configuration file
  */
-
 buildscript {
 	repositories {
 		jcenter()
@@ -13,6 +12,7 @@ buildscript {
 		classpath group: 'org.kt3k.gradle.plugin',		name: 'coveralls-gradle-plugin',		version: gradleCoverallsVersion
 		classpath group: 'com.jfrog.bintray.gradle',	name: 'gradle-bintray-plugin',			version: gradleBintrayVersion
 		classpath group: 'org.jfrog.buildinfo',			name: 'build-info-extractor-gradle',	version: gradleArtifactoryVersion
+		classpath group: 'com.github.adrianbk',			name: 'gradle-travisci-trigger-plugin',	version: gradleTravisCIVersion
 	}
 }
 
@@ -25,7 +25,7 @@ apply from: 'gradle/custom/ide-java.gradle'
 apply from: 'gradle/custom/licence.gradle'
 apply from: 'gradle/custom/jacoco.gradle'
 apply from: 'gradle/custom/publish.gradle'
-
+apply from: 'gradle/custom/travisci.gradle'
 
 repositories {
 	jcenter()
