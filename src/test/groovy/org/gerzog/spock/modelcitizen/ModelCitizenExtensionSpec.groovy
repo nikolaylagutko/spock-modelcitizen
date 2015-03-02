@@ -101,7 +101,7 @@ class ModelCitizenExtensionSpec extends Specification implements TestUtilsTrait 
 		thrown(InvalidSpecException)
 	}
 
-	def "check methot interceptor was applied"(){
+	def "check method interceptor was applied"(){
 		setup:
 		def spec = spec(SampleSpec)
 		def fields = modelFields(spec)
