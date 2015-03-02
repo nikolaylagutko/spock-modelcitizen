@@ -48,7 +48,7 @@ public class ModelCitizenExtension extends AbstractAnnotationDrivenExtension<Use
 
 		validateModelFields(modelFields);
 
-		spec.addInterceptor(new ModelCitizenMethodInterceptor(factory, modelFields));
+		spec.getSetupMethod().addInterceptor(new ModelCitizenMethodInterceptor(factory, modelFields));
 	}
 
 	private void validateModelFields(final List<FieldInfo> modelFields) {
