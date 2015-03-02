@@ -20,6 +20,8 @@ import org.gerzog.spock.modelcitizen.test.data.Bean
 import org.gerzog.spock.modelcitizen.test.specs.SampleSpec
 import org.spockframework.runtime.InvalidSpecException
 import org.spockframework.runtime.extension.IMethodInvocation
+import org.spockframework.runtime.model.MethodInfo
+import org.spockframework.runtime.model.MethodKind
 
 import spock.lang.Specification
 
@@ -36,11 +38,16 @@ class ModelCitizenMethodInterceptorSpec extends Specification implements TestUti
 
 	def invocation = Mock(IMethodInvocation)
 
+	def method = new MethodInfo()
+
 	def target = new SampleSpec()
 
 	def model = Mock(Bean)
 
 	def setup() {
+		method.kind = MethodKind.SETUP
+
+		invocation.method >> method
 		invocation.target >> target
 	}
 
@@ -96,6 +103,6 @@ class ModelCitizenMethodInterceptorSpec extends Specification implements TestUti
 	}
 
 	private callInterceptor(spec) {
-		new ModelCitizenMethodInterceptor(modelFactory, modelFields(spec)).interceptSetupMethod(invocation)
+		new ModelCitizenMethodInterceptor(modelFactory, modelFields(spec)).intercept(invocation)
 	}
 }

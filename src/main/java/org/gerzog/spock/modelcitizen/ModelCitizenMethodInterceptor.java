@@ -18,9 +18,10 @@ package org.gerzog.spock.modelcitizen;
 import java.util.List;
 
 import org.spockframework.runtime.InvalidSpecException;
-import org.spockframework.runtime.extension.AbstractMethodInterceptor;
+import org.spockframework.runtime.extension.IMethodInterceptor;
 import org.spockframework.runtime.extension.IMethodInvocation;
 import org.spockframework.runtime.model.FieldInfo;
+import org.spockframework.runtime.model.MethodKind;
 
 import com.tobedevoured.modelcitizen.CreateModelException;
 import com.tobedevoured.modelcitizen.ModelFactory;
@@ -29,7 +30,7 @@ import com.tobedevoured.modelcitizen.ModelFactory;
  * @author Nikolay Lagutko (nikolay.lagutko@mail.com)
  *
  */
-public class ModelCitizenMethodInterceptor extends AbstractMethodInterceptor {
+public class ModelCitizenMethodInterceptor implements IMethodInterceptor {
 
 	private final ModelFactory modelFactory;
 
@@ -41,8 +42,10 @@ public class ModelCitizenMethodInterceptor extends AbstractMethodInterceptor {
 	}
 
 	@Override
-	public void interceptSetupMethod(final IMethodInvocation invocation) throws Throwable {
-		fields.forEach(field -> initializeModel(invocation.getTarget(), field));
+	public void intercept(final IMethodInvocation invocation) throws Throwable {
+		if (invocation.getMethod().getKind() == MethodKind.SETUP) {
+			fields.forEach(field -> initializeModel(invocation.getTarget(), field));
+		}
 
 		invocation.proceed();
 	}
