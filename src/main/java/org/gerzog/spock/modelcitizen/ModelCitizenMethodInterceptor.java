@@ -21,7 +21,6 @@ import org.spockframework.runtime.InvalidSpecException;
 import org.spockframework.runtime.extension.IMethodInterceptor;
 import org.spockframework.runtime.extension.IMethodInvocation;
 import org.spockframework.runtime.model.FieldInfo;
-import org.spockframework.runtime.model.MethodKind;
 
 import com.tobedevoured.modelcitizen.CreateModelException;
 import com.tobedevoured.modelcitizen.ModelFactory;
@@ -43,9 +42,7 @@ public class ModelCitizenMethodInterceptor implements IMethodInterceptor {
 
 	@Override
 	public void intercept(final IMethodInvocation invocation) throws Throwable {
-		if (invocation.getMethod().getKind() == MethodKind.SETUP) {
-			fields.forEach(field -> initializeModel(invocation.getTarget(), field));
-		}
+		fields.forEach(field -> initializeModel(invocation.getTarget(), field));
 
 		invocation.proceed();
 	}
