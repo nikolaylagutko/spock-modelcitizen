@@ -96,6 +96,6 @@ class ModelCitizenMethodInterceptorSpec extends Specification implements TestUti
 	}
 
 	private callInterceptor(spec) {
-		new ModelCitizenMethodInterceptor(modelFactory, modelFields(spec)).interceptFeatureMethod(invocation)
+		new ModelCitizenMethodInterceptor(modelFactory, modelFields(spec)).interceptSetupMethod(invocation)
 	}
 }
