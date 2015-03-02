@@ -43,7 +43,7 @@ public class ModelCitizenMethodInterceptor implements IMethodInterceptor {
 
 	@Override
 	public void intercept(final IMethodInvocation invocation) throws Throwable {
-		if (invocation.getMethod().getKind() == MethodKind.SETUP) {
+		if (invocation.getMethod().getKind() == MethodKind.SPEC_EXECUTION) {
 			fields.forEach(field -> initializeModel(invocation.getTarget(), field));
 		}
 
