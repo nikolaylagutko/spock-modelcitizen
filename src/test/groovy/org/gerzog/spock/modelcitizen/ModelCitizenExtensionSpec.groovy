@@ -15,6 +15,7 @@
  */
 package org.gerzog.spock.modelcitizen
 
+import org.apache.commons.lang.reflect.FieldUtils
 import org.gerzog.spock.modelcitizen.api.UseBlueprints
 import org.gerzog.spock.modelcitizen.test.TestUtilsTrait
 import org.gerzog.spock.modelcitizen.test.data.blueprints1.AnotherBeanBlueprint
@@ -25,52 +26,40 @@ import org.gerzog.spock.modelcitizen.test.specs.SampleSpec
 import org.gerzog.spock.modelcitizen.test.specs.UseBlueprintsWithClasses
 import org.gerzog.spock.modelcitizen.test.specs.UseBlueprintsWithNoBlueprintClass
 import org.gerzog.spock.modelcitizen.test.specs.UseBlueprintsWithPackageScan
-import org.junit.Rule
-import org.powermock.api.mockito.PowerMockito
-import org.powermock.core.classloader.annotations.PrepareForTest
-import org.powermock.modules.junit4.rule.PowerMockRule
 import org.spockframework.runtime.InvalidSpecException
 
 import spock.lang.Specification
 import spock.lang.Unroll
 
-import com.tobedevoured.modelcitizen.ModelFactory
-
 /**
  * @author Nikolay Lagutko (nikolay.lagutko@mail.com)
  *
  */
-@PrepareForTest(ModelCitizenExtension)
 class ModelCitizenExtensionSpec extends Specification implements TestUtilsTrait {
-
-	@Rule
-	PowerMockRule powerMockRule = new PowerMockRule()
 
 	def extension = new ModelCitizenExtension()
 
-	def modelFactory = new ModelFactory()
-
-	def "check model factory was created"() {
+	def "check interceptor was added"() {
 		setup:
-		setupModelFactoryMock()
+		def spec = spec(UseBlueprintsWithClasses)
 
 		when:
-		applyExtension(UseBlueprintsWithClasses)
+		applyExtension(UseBlueprintsWithClasses, spec)
 
 		then:
-		PowerMockito.verifyNew(ModelFactory).withNoArguments()
+		findInterceptor(spec) != null
 	}
 
 	@Unroll("check blueprints initialized in model factory for #specClass")
 	def "check blueprints initialized in model factory"(specClass, blueprintClasses) {
 		setup:
-		setupModelFactoryMock()
+		def spec = spec(specClass)
 
 		when:
-		applyExtension(specClass)
+		applyExtension(specClass, spec)
 
 		then:
-		validateBlueprints(blueprintClasses)
+		validateBlueprints(spec, blueprintClasses)
 
 		where:
 		specClass 						| blueprintClasses
@@ -106,36 +95,27 @@ class ModelCitizenExtensionSpec extends Specification implements TestUtilsTrait 
 		def spec = spec(SampleSpec)
 		def fields = modelFields(spec)
 
-		setupModelFactoryMock()
-		setupInterceptorMock(fields)
-
 		when:
 		applyExtension(SampleSpec, spec)
 
 		then:
-		PowerMockito.verifyNew(ModelCitizenMethodInterceptor).withArguments(modelFactory, fields)
+		FieldUtils.readDeclaredField(findInterceptor(spec), 'fields', true) == fields
 	}
 
-	private void validateBlueprints(blueprintClasses) {
+	private void validateBlueprints(spec, blueprintClasses) {
+		def modelFactory = findModelFactory(spec)
+
 		assert modelFactory.blueprints.size() == blueprintClasses.size()
 
 		blueprintClasses.forEach {
-			assert findBlueprint(it) != null
+			assert findBlueprint(modelFactory, it) != null
 		}
 	}
 
-	private findBlueprint(blueprintClass) {
+	private findBlueprint(modelFactory, blueprintClass) {
 		modelFactory.blueprints.findResult {
 			blueprintClass.isInstance(it) ? blueprintClass : null
 		}
-	}
-
-	private setupInterceptorMock(fields) {
-		PowerMockito.whenNew(ModelCitizenMethodInterceptor).withArguments(modelFactory, fields).thenReturn(new ModelCitizenMethodInterceptor(modelFactory, fields))
-	}
-
-	private setupModelFactoryMock() {
-		PowerMockito.whenNew(ModelFactory).withNoArguments().thenReturn(modelFactory)
 	}
 
 	private applyExtension(specClass, spec = spec(specClass)) {
@@ -144,5 +124,13 @@ class ModelCitizenExtensionSpec extends Specification implements TestUtilsTrait 
 
 	private extractAnnotation(clazz) {
 		clazz.getAnnotation(UseBlueprints)
+	}
+
+	private findInterceptor(spec) {
+		spec.setupMethod.interceptors.findResult { it instanceof ModelCitizenMethodInterceptor ? it : null }
+	}
+
+	private findModelFactory(spec) {
+		FieldUtils.readDeclaredField(findInterceptor(spec), 'modelFactory', true)
 	}
 }
