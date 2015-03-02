@@ -45,7 +45,7 @@ class ModelCitizenMethodInterceptorSpec extends Specification implements TestUti
 	def model = Mock(Bean)
 
 	def setup() {
-		method.kind = MethodKind.SPEC_EXECUTION
+		method.kind = MethodKind.SETUP
 
 		invocation.method >> method
 		invocation.target >> target
