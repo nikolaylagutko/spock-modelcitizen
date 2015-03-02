@@ -21,6 +21,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * Marks fields to be initialized by corresponding Blueprint
+ *
+ * Blueprint will be selected by field's type
+ *
  * @author Nikolay Lagutko (nikolay.lagutko@mail.com)
  *
  */

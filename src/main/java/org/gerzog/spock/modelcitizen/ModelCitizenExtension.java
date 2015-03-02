@@ -30,6 +30,11 @@ import com.tobedevoured.modelcitizen.ModelFactory;
 import com.tobedevoured.modelcitizen.RegisterBlueprintException;
 
 /**
+ * Extension's entry point
+ *
+ * Initialized ModelCitizen's ModelFactory according to Annotation configuration
+ * and registers interceptor for Spec's Setup method
+ *
  * @author Nikolay Lagutko (nikolay.lagutko@mail.com)
  *
  */

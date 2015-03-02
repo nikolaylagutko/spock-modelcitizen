@@ -24,6 +24,8 @@ import org.gerzog.spock.modelcitizen.ModelCitizenExtension;
 import org.spockframework.runtime.extension.ExtensionAnnotation;
 
 /**
+ * Mark Spec to be initialized with set of Blueprints
+ *
  * @author Nikolay Lagutko (nikolay.lagutko@mail.com)
  *
  */
@@ -32,8 +34,14 @@ import org.spockframework.runtime.extension.ExtensionAnnotation;
 @ExtensionAnnotation(ModelCitizenExtension.class)
 public @interface UseBlueprints {
 
+	/**
+	 * Classes to be registered as Blueprints
+	 */
 	Class<?>[] classes() default {};
 
+	/**
+	 * Package names to scan for Blueprint classes
+	 */
 	String[] packagesToScan() default {};
 
 }

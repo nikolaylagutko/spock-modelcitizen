@@ -26,6 +26,12 @@ import com.tobedevoured.modelcitizen.CreateModelException;
 import com.tobedevoured.modelcitizen.ModelFactory;
 
 /**
+ * Interceptor for Spec's Setup method
+ *
+ * Initialized all @Model fields with corresponding values from @Blueprints and
+ * call original Setup method. So all values initialized at Setup method and can
+ * be used :-)
+ *
  * @author Nikolay Lagutko (nikolay.lagutko@mail.com)
  *
  */
