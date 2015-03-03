@@ -41,7 +41,7 @@ class ModelCitizenMethodInterceptorSpec extends Specification implements TestUti
 	def model = Mock(Bean)
 
 	def setup() {
-		invocation.target >> target
+		invocation.instance >> target
 	}
 
 	def "check model factory was called for model fields initialization"() {

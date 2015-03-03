@@ -48,7 +48,7 @@ public class ModelCitizenMethodInterceptor implements IMethodInterceptor {
 
 	@Override
 	public void intercept(final IMethodInvocation invocation) throws Throwable {
-		fields.forEach(field -> initializeModel(invocation.getTarget(), field));
+		fields.forEach(field -> initializeModel(invocation.getInstance(), field));
 
 		invocation.proceed();
 	}
