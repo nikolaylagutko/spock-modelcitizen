@@ -127,7 +127,7 @@ class ModelCitizenExtensionSpec extends Specification implements TestUtilsTrait 
 	}
 
 	private findInterceptor(spec) {
-		spec.setupMethod.interceptors.findResult { it instanceof ModelCitizenMethodInterceptor ? it : null }
+		spec.setupInterceptors.findResult { it instanceof ModelCitizenMethodInterceptor ? it : null }
 	}
 
 	private findModelFactory(spec) {
