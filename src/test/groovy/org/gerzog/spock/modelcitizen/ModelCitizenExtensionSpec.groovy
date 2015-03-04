@@ -22,6 +22,7 @@ import org.gerzog.spock.modelcitizen.test.data.blueprints1.AnotherBeanBlueprint
 import org.gerzog.spock.modelcitizen.test.data.blueprints1.BeanBlueprint
 import org.gerzog.spock.modelcitizen.test.data.blueprints2.ThirdBeanBlueprint
 import org.gerzog.spock.modelcitizen.test.specs.ModelWithDef
+import org.gerzog.spock.modelcitizen.test.specs.NoModelSpec
 import org.gerzog.spock.modelcitizen.test.specs.SampleSpec
 import org.gerzog.spock.modelcitizen.test.specs.UseBlueprintsWithClasses
 import org.gerzog.spock.modelcitizen.test.specs.UseBlueprintsWithNoBlueprintClass
@@ -100,6 +101,17 @@ class ModelCitizenExtensionSpec extends Specification implements TestUtilsTrait 
 
 		then:
 		FieldUtils.readDeclaredField(findInterceptor(spec), 'fields', true) == fields
+	}
+
+	def "check no interceptor added for no @Model-containing spec"() {
+		setup:
+		def spec = spec(NoModelSpec)
+
+		when:
+		applyExtension(NoModelSpec, spec)
+
+		then:
+		findInterceptor(spec) == null
 	}
 
 	private void validateBlueprints(spec, blueprintClasses) {
