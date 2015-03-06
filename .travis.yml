@@ -12,10 +12,9 @@ env:
 addons:
   coverity_scan:
     project:
-      name: nikolaylagutko/spock-modelcitizen
-      
+      name: "nikolaylagutko/spock-modelcitizen"
+      description: "ModelCitizen integration for SpockFramework"      
     notification_email: nikolay.lagutko@mail.com
-    
-    build_command: "./gradlew clean build"
-    
+    build_command_prepend: "./gradlew clean"    
+    build_command: "./gradlew build"    
     branch_pattern: coverity_scan
