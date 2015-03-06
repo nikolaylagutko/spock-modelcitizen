@@ -27,6 +27,7 @@ import org.gerzog.spock.modelcitizen.test.specs.UseBlueprintsWithClasses
 import org.gerzog.spock.modelcitizen.test.specs.UseBlueprintsWithNoBlueprintClass
 import org.gerzog.spock.modelcitizen.test.specs.UseBlueprintsWithPackageScan
 import org.spockframework.runtime.InvalidSpecException
+import org.spockframework.runtime.extension.IMethodInterceptor
 
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -47,7 +48,7 @@ class ModelCitizenExtensionSpec extends Specification implements TestUtilsTrait 
 		applyExtension(UseBlueprintsWithClasses, spec)
 
 		then:
-		findInterceptor(spec) != null
+		findModelAnnotationInterceptor(spec) != null
 	}
 
 	@Unroll("check blueprints initialized in model factory for #specClass")
@@ -99,7 +100,7 @@ class ModelCitizenExtensionSpec extends Specification implements TestUtilsTrait 
 		applyExtension(SampleSpec, spec)
 
 		then:
-		FieldUtils.readDeclaredField(findInterceptor(spec), 'fields', true) == fields
+		FieldUtils.readDeclaredField(findModelAnnotationInterceptor(spec), 'fields', true) == fields
 	}
 
 	def "check no interceptor added for no @Model-containing spec"() {
@@ -110,7 +111,30 @@ class ModelCitizenExtensionSpec extends Specification implements TestUtilsTrait 
 		applyExtension(NoModelSpec, spec)
 
 		then:
-		findInterceptor(spec) == null
+		findModelAnnotationInterceptor(spec) == null
+	}
+
+	def "check trait initializer was registered"() {
+		setup:
+		def spec = spec(SampleSpec)
+
+		when:
+		applyExtension(SampleSpec, spec)
+
+		then:
+		findTraitInitializerInterceptor(spec) != null
+	}
+
+	def "check trait initializer is first"() {
+		setup:
+		def spec = spec(SampleSpec)
+		spec.initializerInterceptors << [Mock(IMethodInterceptor)]
+
+		when:
+		applyExtension(SampleSpec, spec)
+
+		then:
+		spec.initializerInterceptors[0] instanceof ModelCitizenTraitInitializer
 	}
 
 	private void validateBlueprints(spec, blueprintClasses) {
@@ -137,11 +161,15 @@ class ModelCitizenExtensionSpec extends Specification implements TestUtilsTrait 
 		clazz.getAnnotation(UseBlueprints)
 	}
 
-	private findInterceptor(spec) {
+	private findModelAnnotationInterceptor(spec) {
 		spec.setupInterceptors.findResult { it instanceof ModelCitizenMethodInterceptor ? it : null }
 	}
 
+	private findTraitInitializerInterceptor(spec) {
+		spec.initializerInterceptors.findResult { it instanceof ModelCitizenTraitInitializer ? it : null }
+	}
+
 	private findModelFactory(spec) {
-		FieldUtils.readDeclaredField(findInterceptor(spec), 'modelFactory', true)
+		FieldUtils.readField(findModelAnnotationInterceptor(spec), 'modelFactory', true)
 	}
 }

@@ -44,10 +44,15 @@ public class ModelCitizenExtension extends AbstractAnnotationDrivenExtension<Use
 		ModelFactory factory = new ModelFactory();
 
 		initializeBlueprints(factory, annotation, spec);
-		registerInterceptor(factory, spec);
+		registerTraitInitializerInterceptor(factory, spec);
+		registerModelAnnotationInterceptor(factory, spec);
 	}
 
-	private void registerInterceptor(final ModelFactory factory, final SpecInfo spec) {
+	private void registerTraitInitializerInterceptor(final ModelFactory factory, final SpecInfo spec) {
+		spec.getInitializerInterceptors().add(0, new ModelCitizenTraitInitializer(factory));
+	}
+
+	private void registerModelAnnotationInterceptor(final ModelFactory factory, final SpecInfo spec) {
 		List<FieldInfo> modelFields = getModelFields(spec);
 
 		if (!modelFields.isEmpty()) {
