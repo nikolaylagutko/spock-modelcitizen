@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2015 Nikolay Lagutko <nikolay.lagutko@mail.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,24 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.gerzog.spock.modelcitizen.test.specs
+package org.gerzog.spock.modelcitizen.internal.ast;
 
-import org.gerzog.spock.modelcitizen.api.Model
-import org.gerzog.spock.modelcitizen.extension.UseBlueprints
-import org.gerzog.spock.modelcitizen.test.data.Bean
-import org.gerzog.spock.modelcitizen.test.data.blueprints1.AnotherBeanBlueprint
-import org.gerzog.spock.modelcitizen.test.data.blueprints2.ThirdBeanBlueprint
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-import spock.lang.Specification
-
+import org.codehaus.groovy.transform.GroovyASTTransformationClass;
 
 /**
  * @author Nikolay Lagutko (nikolay.lagutko@mail.com)
  *
  */
-@UseBlueprints(classes = [AnotherBeanBlueprint, ThirdBeanBlueprint])
-class UseBlueprintsWithClasses extends Specification {
+@Retention(RetentionPolicy.SOURCE)
+@Target(ElementType.TYPE)
+@GroovyASTTransformationClass(classes = ApplyModelCitizenTraitASTTransformation.class)
+public @interface ApplyModelCitizenTrait {
 
-	@Model
-	Bean model
 }

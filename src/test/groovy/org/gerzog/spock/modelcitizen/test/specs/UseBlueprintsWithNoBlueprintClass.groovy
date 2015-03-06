@@ -16,7 +16,7 @@
 package org.gerzog.spock.modelcitizen.test.specs
 
 import org.gerzog.spock.modelcitizen.api.Model
-import org.gerzog.spock.modelcitizen.api.UseBlueprints
+import org.gerzog.spock.modelcitizen.extension.UseBlueprints
 import org.gerzog.spock.modelcitizen.test.data.Bean
 
 import spock.lang.Specification

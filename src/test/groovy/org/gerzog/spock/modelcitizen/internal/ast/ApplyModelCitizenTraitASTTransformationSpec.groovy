@@ -13,13 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.gerzog.spock.modelcitizen.internal
+package org.gerzog.spock.modelcitizen.internal.ast
 
 import org.codehaus.groovy.ast.ASTNode
 import org.codehaus.groovy.ast.AnnotationNode
 import org.codehaus.groovy.ast.ClassNode
 import org.codehaus.groovy.control.SourceUnit
 import org.codehaus.groovy.transform.trait.Traits
+import org.gerzog.spock.modelcitizen.internal.ModelCitizenTrait
 
 import spock.lang.Specification
 

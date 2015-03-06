@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2015 Nikolay Lagutko <nikolay.lagutko@mail.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,24 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.gerzog.spock.modelcitizen.test.specs
+package org.gerzog.spock.modelcitizen.api
 
-import org.gerzog.spock.modelcitizen.api.Model
+
+
+import groovy.transform.AnnotationCollector
+
 import org.gerzog.spock.modelcitizen.extension.UseBlueprints
-import org.gerzog.spock.modelcitizen.test.data.Bean
-import org.gerzog.spock.modelcitizen.test.data.blueprints1.AnotherBeanBlueprint
-import org.gerzog.spock.modelcitizen.test.data.blueprints2.ThirdBeanBlueprint
-
-import spock.lang.Specification
-
+import org.gerzog.spock.modelcitizen.internal.ast.ApplyModelCitizenTrait
 
 /**
  * @author Nikolay Lagutko (nikolay.lagutko@mail.com)
  *
  */
-@UseBlueprints(classes = [AnotherBeanBlueprint, ThirdBeanBlueprint])
-class UseBlueprintsWithClasses extends Specification {
-
-	@Model
-	Bean model
+@AnnotationCollector([UseBlueprints, ApplyModelCitizenTrait])
+@interface ModelCitizen {
 }

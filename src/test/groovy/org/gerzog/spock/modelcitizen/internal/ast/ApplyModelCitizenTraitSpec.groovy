@@ -13,10 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.gerzog.spock.modelcitizen.internal
+package org.gerzog.spock.modelcitizen.internal.ast
+
+import org.gerzog.spock.modelcitizen.internal.ModelCitizenTrait
+import org.gerzog.spock.modelcitizen.test.SpecCompilationTrait
 
 import spock.lang.Specification
-import spock.util.EmbeddedSpecCompiler
 
 import com.tobedevoured.modelcitizen.ModelFactory
 
@@ -24,7 +26,7 @@ import com.tobedevoured.modelcitizen.ModelFactory
  * @author Nikolay Lagutko (nikolay.lagutko@mail.com)
  *
  */
-class ApplyModelCitizenTraitSpec extends Specification {
+class ApplyModelCitizenTraitSpec extends Specification implements SpecCompilationTrait {
 
 	def spec = """
 		@ApplyModelCitizenTrait
@@ -32,18 +34,15 @@ class ApplyModelCitizenTraitSpec extends Specification {
 		}
 		"""
 
-	EmbeddedSpecCompiler compiler = new EmbeddedSpecCompiler()
-
 	def modelFactory = Mock(ModelFactory)
 
 	def setup() {
-		compiler.addClassImport(ApplyModelCitizenTrait)
-		compiler.addClassImport(Specification)
+		imports([ApplyModelCitizenTrait])
 	}
 
 	def "check a trait was added for spec"() {
 		when:
-		def result = compile()
+		def result = compile(spec)
 
 		then:
 		ModelCitizenTrait.isAssignableFrom(result)
@@ -51,7 +50,7 @@ class ApplyModelCitizenTraitSpec extends Specification {
 
 	def "check no error during spec compilation with ast transformation"() {
 		when:
-		compile()
+		compile(spec)
 
 		then:
 		noExceptionThrown()
@@ -59,7 +58,7 @@ class ApplyModelCitizenTraitSpec extends Specification {
 
 	def "check delegation works"() {
 		setup:
-		def clazz = compile()
+		def clazz = compile(spec)
 		def instance = clazz.newInstance(modelFactory: modelFactory)
 
 		when:
@@ -67,9 +66,5 @@ class ApplyModelCitizenTraitSpec extends Specification {
 
 		then:
 		1 * modelFactory.createModel(_)
-	}
-
-	private compile() {
-		compiler.compile(spec).first()
 	}
 }

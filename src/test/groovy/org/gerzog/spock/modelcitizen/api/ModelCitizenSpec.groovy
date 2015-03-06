@@ -13,22 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.gerzog.spock.modelcitizen.internal;
+package org.gerzog.spock.modelcitizen.api
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import org.gerzog.spock.modelcitizen.internal.ModelCitizenTrait
+import org.gerzog.spock.modelcitizen.test.SpecCompilationTrait
 
-import org.codehaus.groovy.transform.GroovyASTTransformationClass;
+import spock.lang.Specification
 
 /**
  * @author Nikolay Lagutko (nikolay.lagutko@mail.com)
  *
  */
-@Retention(RetentionPolicy.SOURCE)
-@Target(ElementType.TYPE)
-@GroovyASTTransformationClass(classes = ApplyModelCitizenTraitASTTransformation.class)
-public @interface ApplyModelCitizenTrait {
+class ModelCitizenSpec extends Specification implements SpecCompilationTrait {
 
+	def spec = """
+		@ModelCitizen
+		class TraitedSpec extends Specification {
+		}
+		"""
+
+	def setup() {
+		imports([ModelCitizen])
+	}
+
+	def "check a trait was added for spec"() {
+		when:
+		def result = compile(spec)
+
+		then:
+		ModelCitizenTrait.isAssignableFrom(result)
+	}
 }

@@ -15,6 +15,8 @@
  */
 package org.gerzog.spock.modelcitizen.internal
 
+import org.gerzog.spock.modelcitizen.internal.ModelCitizenTrait;
+
 import spock.lang.Specification
 import spock.lang.Unroll
 

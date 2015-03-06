@@ -13,14 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.gerzog.spock.modelcitizen.api;
+package org.gerzog.spock.modelcitizen.extension;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.gerzog.spock.modelcitizen.ModelCitizenExtension;
 import org.spockframework.runtime.extension.ExtensionAnnotation;
 
 /**

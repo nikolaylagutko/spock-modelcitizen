@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.gerzog.spock.modelcitizen.internal;
+package org.gerzog.spock.modelcitizen.internal.ast;
 
 import org.codehaus.groovy.ast.ASTNode;
 import org.codehaus.groovy.ast.ClassHelper;
@@ -22,6 +22,7 @@ import org.codehaus.groovy.control.CompilePhase;
 import org.codehaus.groovy.control.SourceUnit;
 import org.codehaus.groovy.transform.ASTTransformation;
 import org.codehaus.groovy.transform.GroovyASTTransformation;
+import org.gerzog.spock.modelcitizen.internal.ModelCitizenTrait;
 
 /**
  * @author Nikolay Lagutko (nikolay.lagutko@mail.com)

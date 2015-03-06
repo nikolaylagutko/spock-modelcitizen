@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.gerzog.spock.modelcitizen
+package org.gerzog.spock.modelcitizen.extension
 
 import org.gerzog.spock.modelcitizen.test.TestUtilsTrait
 import org.gerzog.spock.modelcitizen.test.data.Bean

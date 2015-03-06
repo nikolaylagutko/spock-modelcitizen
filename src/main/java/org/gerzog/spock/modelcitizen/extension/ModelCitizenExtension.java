@@ -13,14 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.gerzog.spock.modelcitizen;
+package org.gerzog.spock.modelcitizen.extension;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.gerzog.spock.modelcitizen.api.Model;
-import org.gerzog.spock.modelcitizen.api.UseBlueprints;
 import org.spockframework.runtime.InvalidSpecException;
 import org.spockframework.runtime.extension.AbstractAnnotationDrivenExtension;
 import org.spockframework.runtime.model.FieldInfo;

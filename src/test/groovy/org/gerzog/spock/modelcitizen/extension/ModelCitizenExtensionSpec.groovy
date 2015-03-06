@@ -13,10 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.gerzog.spock.modelcitizen
+package org.gerzog.spock.modelcitizen.extension
 
 import org.apache.commons.lang.reflect.FieldUtils
-import org.gerzog.spock.modelcitizen.api.UseBlueprints
 import org.gerzog.spock.modelcitizen.test.TestUtilsTrait
 import org.gerzog.spock.modelcitizen.test.data.blueprints1.AnotherBeanBlueprint
 import org.gerzog.spock.modelcitizen.test.data.blueprints1.BeanBlueprint
