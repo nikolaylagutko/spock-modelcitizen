@@ -8,3 +8,14 @@ env:
   global:
   - secure: IZUFECrJgpt23u/rbSx8Lv2Yg+NfQa58vrHAU51Gym3NGA4E+W5rf2Eqvmfpgxd/dFkRwbAl0u26fVOOmSOjWN3go16TY5jea5Fimz4y2ROvNekhYMFAbUiZBKsbcLUeuHh1TvdM9rSR+Rsk6Y8tYwMnczlB3XXVrwi7hAjmrfY=
   - secure: QGRRez1lJat918L3fsdv/fu4Bq1dx5I04DAwvdxZCdbtsUKoK+PpPeR7y4ThakAtLk6dvwxgLQl6PrJcOT3bT8qCw7x10mr+4I0bft1KymR/v09FSJ+NAO+R3xl53WzXPYpddj2zKxwQZb8cFBA+24tqsqRgLMcXLU3dpcthwkA=
+  - secure: EXAT8c0KGFZ64fmW0n6j/ZeYlDcLsb81W8IO2RXBP6qrtSFhQpcZy81melDII0tzyVV68gQtatgraR4j1UDg8uH2O8YLQlpw04vverAbNBzDjJeBDYnAkEAB7zhR+JzDp4Jl0zDORScWfJCNn4N5jPj3+5tbgpr0Em+4lq6ue/A=
+addons:
+  coverity_scan:
+    project:
+      name: nikolaylagutko/spock-modelcitizen
+      
+    notification_email: nikolay.lagutko@mail.com
+    
+    build_command: "./gradlew clean build"
+    
+    branch_pattern: coverity_scan
