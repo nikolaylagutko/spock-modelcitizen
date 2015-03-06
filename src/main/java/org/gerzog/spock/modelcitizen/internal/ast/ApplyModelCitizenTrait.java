@@ -29,6 +29,6 @@ import org.codehaus.groovy.transform.GroovyASTTransformationClass;
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.TYPE)
 @GroovyASTTransformationClass(classes = ApplyModelCitizenTraitASTTransformation.class)
-public @interface ApplyModelCitizenTrait {
+@interface ApplyModelCitizenTrait {
 
 }

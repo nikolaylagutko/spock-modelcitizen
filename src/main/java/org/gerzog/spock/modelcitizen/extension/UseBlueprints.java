@@ -31,7 +31,7 @@ import org.spockframework.runtime.extension.ExtensionAnnotation;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @ExtensionAnnotation(ModelCitizenExtension.class)
-public @interface UseBlueprints {
+@interface UseBlueprints {
 
 	/**
 	 * Classes to be registered as Blueprints
