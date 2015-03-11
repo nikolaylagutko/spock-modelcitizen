@@ -16,11 +16,12 @@
 package org.gerzog.spock.modelcitizen.internal.ast;
 
 import org.codehaus.groovy.ast.ASTNode;
+import org.codehaus.groovy.ast.AnnotationNode;
 import org.codehaus.groovy.ast.ClassHelper;
 import org.codehaus.groovy.ast.ClassNode;
 import org.codehaus.groovy.control.CompilePhase;
 import org.codehaus.groovy.control.SourceUnit;
-import org.codehaus.groovy.transform.ASTTransformation;
+import org.codehaus.groovy.transform.AbstractASTTransformation;
 import org.codehaus.groovy.transform.GroovyASTTransformation;
 import org.gerzog.spock.modelcitizen.internal.ModelCitizenTrait;
 
@@ -29,15 +30,24 @@ import org.gerzog.spock.modelcitizen.internal.ModelCitizenTrait;
  *
  */
 @GroovyASTTransformation(phase = CompilePhase.SEMANTIC_ANALYSIS)
-public class ApplyModelCitizenTraitASTTransformation implements ASTTransformation {
+public class ApplyModelCitizenTraitASTTransformation extends AbstractASTTransformation {
+
+	private static final String TRAIT_ENABLING_FLAG = "enableTrait";
 
 	private static final ClassNode MODELCITIZEN_TRAIT = ClassHelper.makeWithoutCaching(ModelCitizenTrait.class);
 
 	@Override
 	public void visit(final ASTNode[] nodes, final SourceUnit source) {
+		AnnotationNode annotation = (AnnotationNode) nodes[0];
 		ClassNode parent = (ClassNode) nodes[1];
 
-		parent.addInterface(MODELCITIZEN_TRAIT);
+		if (isEnabled(annotation)) {
+			parent.addInterface(MODELCITIZEN_TRAIT);
+		}
 	}
 
+	private boolean isEnabled(final AnnotationNode annotation) {
+		String flagValue = getMemberStringValue(annotation, TRAIT_ENABLING_FLAG);
+		return (flagValue == null) || Boolean.parseBoolean(flagValue);
+	}
 }

@@ -34,6 +34,12 @@ class ApplyModelCitizenTraitSpec extends Specification implements SpecCompilatio
 		}
 		"""
 
+	def untraitedSpec = """
+		@ApplyModelCitizenTrait(enableTrait = false)
+		class TraitedSpec extends Specification {
+		}
+		"""
+
 	def modelFactory = Mock(ModelFactory)
 
 	def setup() {
@@ -66,5 +72,13 @@ class ApplyModelCitizenTraitSpec extends Specification implements SpecCompilatio
 
 		then:
 		1 * modelFactory.createModel(_)
+	}
+
+	def "check trait not applied"() {
+		when:
+		def result = compile(untraitedSpec)
+
+		then:
+		!ModelCitizenTrait.isAssignableFrom(result)
 	}
 }

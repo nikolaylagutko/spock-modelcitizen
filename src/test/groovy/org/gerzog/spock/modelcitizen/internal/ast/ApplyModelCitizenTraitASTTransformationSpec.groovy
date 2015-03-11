@@ -18,6 +18,7 @@ package org.gerzog.spock.modelcitizen.internal.ast
 import org.codehaus.groovy.ast.ASTNode
 import org.codehaus.groovy.ast.AnnotationNode
 import org.codehaus.groovy.ast.ClassNode
+import org.codehaus.groovy.ast.expr.ConstantExpression
 import org.codehaus.groovy.control.SourceUnit
 import org.codehaus.groovy.transform.trait.Traits
 import org.gerzog.spock.modelcitizen.internal.ModelCitizenTrait
@@ -55,5 +56,16 @@ class ApplyModelCitizenTraitASTTransformationSpec extends Specification {
 			Traits.isTrait(it)
 			it.typeClass == ModelCitizenTrait
 		}
+	}
+
+	def "check no interfaces was added if annotation contains disabled flag"() {
+		setup:
+		annotation.getMember('enableTrait') >> new ConstantExpression(false)
+
+		when:
+		transformer.visit([annotation, spec] as ASTNode[], source)
+
+		then:
+		0 * spec.addInterface(_)
 	}
 }

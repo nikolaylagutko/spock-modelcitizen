@@ -31,4 +31,6 @@ import org.codehaus.groovy.transform.GroovyASTTransformationClass;
 @GroovyASTTransformationClass(classes = ApplyModelCitizenTraitASTTransformation.class)
 @interface ApplyModelCitizenTrait {
 
+	boolean enableTrait() default true;
+
 }
