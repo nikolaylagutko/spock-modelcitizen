@@ -45,7 +45,7 @@ class SpecCompilationTrait {
 		if (name == null) {
 			classes.first()
 		} else {
-			classes.findAll({ it.simpleName == name || it.name == name }).first()
+			classes.findAll { it.simpleName == name || it.name == name }.first()
 		}
 	}
 
