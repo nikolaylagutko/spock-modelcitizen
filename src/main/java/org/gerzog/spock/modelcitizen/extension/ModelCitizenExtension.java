@@ -55,19 +55,19 @@ public class ModelCitizenExtension extends AbstractAnnotationDrivenExtension<Use
 
 	private void registerModelAnnotationInterceptor(final ModelFactory factory, final SpecInfo spec, final List<FieldInfo> modelFields) {
 		if (!modelFields.isEmpty()) {
-			validateModelFields(modelFields);
+			validateModelFields(spec.getName(), modelFields);
 
 			spec.addSetupInterceptor(new ModelCitizenMethodInterceptor(factory, modelFields));
 		}
 	}
 
-	private void validateModelFields(final List<FieldInfo> modelFields) {
-		modelFields.forEach(this::validateModelField);
+	private void validateModelFields(final String specName, final List<FieldInfo> modelFields) {
+		modelFields.forEach(field -> validateModelField(specName, field));
 	}
 
-	private void validateModelField(final FieldInfo modelField) {
+	private void validateModelField(final String specName, final FieldInfo modelField) {
 		if (Objects.equals(modelField.getType(), Object.class)) {
-			throw new InvalidSpecException("Object class was detected as @Model source. Please check you didn't use 'def' keyword to define @Model field");
+			throw new InvalidSpecException("Object class was detected as @Model source in <" + specName + ">. Please check you didn't use 'def' keyword to define @Model field");
 		}
 	}
 
