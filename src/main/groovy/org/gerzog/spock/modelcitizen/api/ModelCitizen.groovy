@@ -15,8 +15,6 @@
  */
 package org.gerzog.spock.modelcitizen.api
 
-
-
 import groovy.transform.AnnotationCollector
 
 import org.gerzog.spock.modelcitizen.extension.UseBlueprints

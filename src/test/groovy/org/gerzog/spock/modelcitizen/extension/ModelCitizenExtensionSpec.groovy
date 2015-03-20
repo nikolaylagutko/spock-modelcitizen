@@ -21,6 +21,7 @@ import org.gerzog.spock.modelcitizen.test.TestUtilsTrait
 import org.gerzog.spock.modelcitizen.test.data.blueprints1.AnotherBeanBlueprint
 import org.gerzog.spock.modelcitizen.test.data.blueprints1.BeanBlueprint
 import org.gerzog.spock.modelcitizen.test.data.blueprints2.ThirdBeanBlueprint
+import org.gerzog.spock.modelcitizen.test.specs.TestSpecs
 import org.spockframework.runtime.InvalidSpecException
 import org.spockframework.runtime.extension.IMethodInterceptor
 
@@ -37,7 +38,7 @@ class ModelCitizenExtensionSpec extends Specification implements TestUtilsTrait,
 
 	def "check interceptor was added"() {
 		setup:
-		def specClass = compileSpec('org.gerzog.spock.modelcitizen.test.specs.UseBlueprintsWithClasses')
+		def specClass = compileSpec(TestSpecs.USE_BLUEPRINTS_WITH_CLASSES)
 		def spec = spec(specClass)
 
 		when:
@@ -47,7 +48,7 @@ class ModelCitizenExtensionSpec extends Specification implements TestUtilsTrait,
 		findModelAnnotationInterceptor(spec) != null
 	}
 
-	@Unroll("check blueprints initialized in model factory for #specClass")
+	@Unroll('check blueprints initialized in model factory for #specClassName')
 	def "check blueprints initialized in model factory"(specClassName, blueprintClasses) {
 		setup:
 		def specClass = compileSpec(specClassName)
@@ -61,11 +62,11 @@ class ModelCitizenExtensionSpec extends Specification implements TestUtilsTrait,
 
 		where:
 		specClassName 						| blueprintClasses
-		'org.gerzog.spock.modelcitizen.test.specs.UseBlueprintsWithClasses' 		| [
+		TestSpecs.USE_BLUEPRINTS_WITH_CLASSES 		| [
 			AnotherBeanBlueprint,
 			ThirdBeanBlueprint
 		]
-		'org.gerzog.spock.modelcitizen.test.specs.UseBlueprintsWithPackageScan' 	| [
+		TestSpecs.USE_BLUEPRINTS_WITH_PACKAGE_SCAN	| [
 			BeanBlueprint,
 			AnotherBeanBlueprint,
 			ThirdBeanBlueprint
@@ -74,7 +75,7 @@ class ModelCitizenExtensionSpec extends Specification implements TestUtilsTrait,
 
 	def "check an exception thrown for incorrect model factory config"() {
 		when:
-		def specClass = compileSpec('org.gerzog.spock.modelcitizen.test.specs.UseBlueprintsWithNoBlueprintClass')
+		def specClass = compileSpec(TestSpecs.USE_BLUEPRINTS_WITH_NO_BLUEPRINT_CLASS)
 		applyExtension(specClass)
 
 		then:
@@ -83,16 +84,16 @@ class ModelCitizenExtensionSpec extends Specification implements TestUtilsTrait,
 
 	def "check an error occured for @Model applied to 'def' field"() {
 		when:
-		def specClass = compileSpec('org.gerzog.spock.modelcitizen.test.specs.ModelWithDef')
+		def specClass = compileSpec(TestSpecs.MODEL_WITH_DEF)
 		applyExtension(specClass)
 
 		then:
 		thrown(InvalidSpecException)
 	}
 
-	def "check method interceptor was applied"(){
+	def "check method interceptor was applied"() {
 		setup:
-		def specClass = compileSpec('org.gerzog.spock.modelcitizen.test.specs.SampleSpec')
+		def specClass = compileSpec(TestSpecs.SAMPLE_SPEC)
 		def spec = spec(specClass)
 		def fields = modelFields(spec)
 
@@ -105,7 +106,7 @@ class ModelCitizenExtensionSpec extends Specification implements TestUtilsTrait,
 
 	def "check no interceptor added for no @Model-containing spec"() {
 		setup:
-		def specClass = compileSpec('org.gerzog.spock.modelcitizen.test.specs.NoModelSpec')
+		def specClass = compileSpec(TestSpecs.NO_MODEL_SPEC)
 		def spec = spec(specClass)
 
 		when:
@@ -117,7 +118,7 @@ class ModelCitizenExtensionSpec extends Specification implements TestUtilsTrait,
 
 	def "check trait initializer was registered"() {
 		setup:
-		def specClass = compileSpec('org.gerzog.spock.modelcitizen.test.specs.NoModelSpec')
+		def specClass = compileSpec(TestSpecs.NO_MODEL_SPEC)
 		def spec = spec(specClass)
 
 		when:
@@ -129,7 +130,7 @@ class ModelCitizenExtensionSpec extends Specification implements TestUtilsTrait,
 
 	def "check trait initializer is first"() {
 		setup:
-		def specClass = compileSpec('org.gerzog.spock.modelcitizen.test.specs.NoModelSpec')
+		def specClass = compileSpec(TestSpecs.NO_MODEL_SPEC)
 		def spec = spec(specClass)
 		spec.initializerInterceptors << [Mock(IMethodInterceptor)]
 

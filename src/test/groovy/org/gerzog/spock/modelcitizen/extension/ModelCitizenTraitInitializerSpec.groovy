@@ -17,6 +17,7 @@ package org.gerzog.spock.modelcitizen.extension
 
 import org.gerzog.spock.modelcitizen.internal.ModelCitizenTrait
 import org.gerzog.spock.modelcitizen.test.SpecCompilationTrait
+import org.gerzog.spock.modelcitizen.test.specs.TestSpecs
 import org.spockframework.runtime.extension.IMethodInvocation
 
 import spock.lang.Specification
@@ -39,7 +40,7 @@ class ModelCitizenTraitInitializerSpec extends Specification implements SpecComp
 
 	def "check model not initialized for non-traited spec"() {
 		setup:
-		instance = newSpec('org.gerzog.spock.modelcitizen.test.specs.SampleSpec')
+		instance = newSpec(TestSpecs.SAMPLE_SPEC)
 		and:
 		invocation.instance >> instance
 
@@ -52,7 +53,7 @@ class ModelCitizenTraitInitializerSpec extends Specification implements SpecComp
 
 	def "check model initialized for traited spec"() {
 		setup:
-		instance = newSpec('org.gerzog.spock.modelcitizen.test.specs.SampleSpec', ModelCitizenTrait)
+		instance = newSpec(TestSpecs.SAMPLE_SPEC, ModelCitizenTrait)
 		and:
 		invocation.instance >> instance
 

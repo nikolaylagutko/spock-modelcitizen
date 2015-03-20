@@ -36,7 +36,7 @@ class SpecCompilationTrait {
 
 	def imports(imports) {
 		imports << Specification
-		imports.forEach {compiler.addClassImport(it)}
+		imports.forEach { compiler.addClassImport(it) }
 	}
 
 	def compile(text) {
@@ -45,7 +45,7 @@ class SpecCompilationTrait {
 
 	def compileSpec(name) {
 		def specText
-		SpecCompilationTrait.class.getResource('/' + convertClassNameToPath(name)).withInputStream {
+		SpecCompilationTrait.getResource('/' + convertClassNameToPath(name)).withInputStream {
 			specText = IOUtils.toString(it)
 		}
 

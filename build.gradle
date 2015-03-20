@@ -19,6 +19,7 @@ buildscript {
 
 apply plugin: 'java'
 apply plugin: 'groovy'
+
 apply plugin: 'com.github.ben-manes.versions'
 apply plugin: 'com.github.kt3k.coveralls'
 apply plugin: 'net.researchgate.release'
@@ -28,6 +29,8 @@ apply from: 'gradle/custom/licence.gradle'
 apply from: 'gradle/custom/jacoco.gradle'
 apply from: 'gradle/custom/publish.gradle'
 apply from: 'gradle/custom/travisci.gradle'
+apply from: 'gradle/custom/findbugs.gradle'
+apply from: 'gradle/custom/codenarc.gradle'
 
 repositories {
 	jcenter()

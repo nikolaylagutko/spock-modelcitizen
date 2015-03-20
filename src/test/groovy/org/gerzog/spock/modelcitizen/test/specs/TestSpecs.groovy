@@ -13,36 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.gerzog.spock.modelcitizen.internal
-
-import spock.lang.Specification
-import spock.lang.Unroll
-
-import com.tobedevoured.modelcitizen.ModelFactory
+package org.gerzog.spock.modelcitizen.test.specs
 
 /**
  * @author Nikolay Lagutko (nikolay.lagutko@mail.com)
  *
  */
-class ModelCitizenTraitSpec extends Specification {
+final class TestSpecs {
 
-	def modelFactory = Mock(ModelFactory)
+	final static MODEL_WITH_DEF = 'org.gerzog.spock.modelcitizen.test.specs.ModelWithDef'
 
-	def modelCitizenTrait = new Object() as ModelCitizenTrait
+	final static NO_MODEL_SPEC = 'org.gerzog.spock.modelcitizen.test.specs.NoModelSpec'
 
-	def setup() {
-		modelCitizenTrait.modelFactory = modelFactory
-	}
+	final static SAMPLE_SPEC = 'org.gerzog.spock.modelcitizen.test.specs.SampleSpec'
 
-	@Unroll
-	def "check a model factory's createModel was called"(def template) {
-		when:
-		modelCitizenTrait.model(template)
+	final static USE_BLUEPRINTS_WITH_CLASSES = 'org.gerzog.spock.modelcitizen.test.specs.UseBlueprintsWithClasses'
 
-		then:
-		1 * modelFactory.createModel(template)
+	final static USE_BLUEPRINTS_WITH_NO_BLUEPRINT_CLASS = 'org.gerzog.spock.modelcitizen.test.specs.UseBlueprintsWithNoBlueprintClass'
 
-		where:
-		template << [Object, new Object()]
-	}
+	final static USE_BLUEPRINTS_WITH_PACKAGE_SCAN = 'org.gerzog.spock.modelcitizen.test.specs.UseBlueprintsWithPackageScan'
 }

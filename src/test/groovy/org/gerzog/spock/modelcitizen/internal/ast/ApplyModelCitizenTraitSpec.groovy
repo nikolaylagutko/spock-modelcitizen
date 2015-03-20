@@ -28,11 +28,7 @@ import com.tobedevoured.modelcitizen.ModelFactory
  */
 class ApplyModelCitizenTraitSpec extends Specification implements SpecCompilationTrait {
 
-	def spec = """
-		@ApplyModelCitizenTrait
-		class TraitedSpec extends Specification {
-		}
-		"""
+	def spec = '@ApplyModelCitizenTrait class TraitedSpec extends Specification { }'
 
 	def modelFactory = Mock(ModelFactory)
 
@@ -59,7 +55,7 @@ class ApplyModelCitizenTraitSpec extends Specification implements SpecCompilatio
 	def "check delegation works"() {
 		setup:
 		def clazz = compile(spec)
-		def instance = clazz.newInstance(modelFactory: modelFactory)
+		def instance = clazz.newInstance(modelFactory:modelFactory)
 
 		when:
 		instance.model(new Object())

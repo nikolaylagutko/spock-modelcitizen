@@ -26,11 +26,7 @@ import spock.lang.Specification
  */
 class ModelCitizenSpec extends Specification implements SpecCompilationTrait {
 
-	def spec = """
-		@ModelCitizen
-		class TraitedSpec extends Specification {
-		}
-		"""
+	def spec = '@ModelCitizen class TraitedSpec extends Specification { }'
 
 	def setup() {
 		imports([ModelCitizen])
