@@ -15,9 +15,9 @@
  */
 package org.gerzog.spock.modelcitizen.extension
 
+import org.gerzog.spock.modelcitizen.test.SpecCompilationTrait
 import org.gerzog.spock.modelcitizen.test.TestUtilsTrait
 import org.gerzog.spock.modelcitizen.test.data.Bean
-import org.gerzog.spock.modelcitizen.test.specs.SampleSpec
 import org.spockframework.runtime.InvalidSpecException
 import org.spockframework.runtime.extension.IMethodInvocation
 
@@ -30,13 +30,13 @@ import com.tobedevoured.modelcitizen.ModelFactory
  * @author Nikolay Lagutko (nikolay.lagutko@mail.com)
  *
  */
-class ModelCitizenMethodInterceptorSpec extends Specification implements TestUtilsTrait {
+class ModelCitizenMethodInterceptorSpec extends Specification implements TestUtilsTrait, SpecCompilationTrait {
 
 	def modelFactory = Mock(ModelFactory)
 
 	def invocation = Mock(IMethodInvocation)
 
-	def target = new SampleSpec()
+	def target = newSpec('org.gerzog.spock.modelcitizen.test.specs.SampleSpec')
 
 	def model = Mock(Bean)
 
@@ -46,7 +46,8 @@ class ModelCitizenMethodInterceptorSpec extends Specification implements TestUti
 
 	def "check model factory was called for model fields initialization"() {
 		setup:
-		def spec = spec(SampleSpec)
+		def specClass = compileSpec('org.gerzog.spock.modelcitizen.test.specs.SampleSpec')
+		def spec = spec(specClass)
 
 		when:
 		callInterceptor(spec)
@@ -57,7 +58,8 @@ class ModelCitizenMethodInterceptorSpec extends Specification implements TestUti
 
 	def "check spec exception occurs if model factory raises error"() {
 		setup:
-		def spec = spec(SampleSpec)
+		def specClass = compileSpec('org.gerzog.spock.modelcitizen.test.specs.SampleSpec')
+		def spec = spec(specClass)
 
 		when:
 		modelFactory.createModel(Bean) >> { throw new CreateModelException('') }
@@ -70,7 +72,8 @@ class ModelCitizenMethodInterceptorSpec extends Specification implements TestUti
 
 	def "check field was initialized with corresponding value"() {
 		setup:
-		def spec = spec(SampleSpec)
+		def specClass = compileSpec('org.gerzog.spock.modelcitizen.test.specs.SampleSpec')
+		def spec = spec(specClass)
 
 		when:
 		modelFactory.createModel(Bean) >> model
@@ -83,7 +86,8 @@ class ModelCitizenMethodInterceptorSpec extends Specification implements TestUti
 
 	def "check feature method was called after model initialization"() {
 		when:
-		callInterceptor(spec(SampleSpec))
+		def specClass = compileSpec('org.gerzog.spock.modelcitizen.test.specs.SampleSpec')
+		callInterceptor(spec(specClass))
 
 		then:
 		1 * invocation.proceed()

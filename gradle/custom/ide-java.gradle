@@ -1,5 +1,5 @@
 /**
- * Coniguration Eclipse preferences
+ * Coniguration Eclipse preferences for Java
  */
 
 apply plugin: 'eclipse'
