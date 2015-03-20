@@ -31,13 +31,13 @@ import org.gerzog.spock.modelcitizen.internal.ModelCitizenTrait;
 @GroovyASTTransformation(phase = CompilePhase.SEMANTIC_ANALYSIS)
 public class ApplyModelCitizenTraitASTTransformation implements ASTTransformation {
 
-	private static final ClassNode MODELCITIZEN_TRAIT = ClassHelper.makeWithoutCaching(ModelCitizenTrait.class);
+	private static final ClassNode TRAIT_CLASS_NODE = ClassHelper.makeWithoutCaching(ModelCitizenTrait.class);
 
 	@Override
 	public void visit(final ASTNode[] nodes, final SourceUnit source) {
-		ClassNode parent = (ClassNode) nodes[1];
+		final ClassNode parent = (ClassNode) nodes[1];
 
-		parent.addInterface(MODELCITIZEN_TRAIT);
+		parent.addInterface(TRAIT_CLASS_NODE);
 	}
 
 }
