@@ -39,8 +39,14 @@ class SpecCompilationTrait {
 		imports.forEach { compiler.addClassImport(it) }
 	}
 
-	def compile(text) {
-		compiler.compile(text).first()
+	def compile(text, name = null) {
+		def classes = compiler.compile(text)
+
+		if (name == null) {
+			classes.first()
+		} else {
+			classes.findAll({ it.simpleName == name || it.name == name }).first()
+		}
 	}
 
 	def compileSpec(name) {
@@ -49,7 +55,7 @@ class SpecCompilationTrait {
 			specText = IOUtils.toString(it)
 		}
 
-		compile(specText)
+		compile(specText, name)
 	}
 
 	def newSpec(name, traitClass = null) {

@@ -48,6 +48,18 @@ class ModelCitizenExtensionSpec extends Specification implements TestUtilsTrait,
 		findModelAnnotationInterceptor(spec) != null
 	}
 
+	def "check an interceptor was added to spec when annotation used for superclass"() {
+		setup:
+		def specClass = compileSpec(TestSpecs.SPEC_WITH_SUPER_CLASS)
+		def spec = spec(specClass)
+
+		when:
+		applyExtension(specClass, spec)
+
+		then:
+		findModelAnnotationInterceptor(spec) != null
+	}
+
 	@Unroll('check blueprints initialized in model factory for #specClassName')
 	def "check blueprints initialized in model factory"(specClassName, blueprintClasses) {
 		setup:

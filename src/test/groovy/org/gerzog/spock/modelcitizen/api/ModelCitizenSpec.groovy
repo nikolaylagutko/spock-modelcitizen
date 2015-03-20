@@ -28,6 +28,15 @@ class ModelCitizenSpec extends Specification implements SpecCompilationTrait {
 
 	def spec = '@ModelCitizen class TraitedSpec extends Specification { }'
 
+	def superClassSpec = """
+		@ModelCitizen
+		abstract class AbstractSpec extends Specification {
+		}
+
+		class RealSpec extends AbstractSpec {
+		}
+	"""
+
 	def setup() {
 		imports([ModelCitizen])
 	}
@@ -35,6 +44,14 @@ class ModelCitizenSpec extends Specification implements SpecCompilationTrait {
 	def "check a trait was added for spec"() {
 		when:
 		def result = compile(spec)
+
+		then:
+		ModelCitizenTrait.isAssignableFrom(result)
+	}
+
+	def "check a trait was added for spec via superspec"() {
+		when:
+		def result = compile(superClassSpec, 'RealSpec')
 
 		then:
 		ModelCitizenTrait.isAssignableFrom(result)

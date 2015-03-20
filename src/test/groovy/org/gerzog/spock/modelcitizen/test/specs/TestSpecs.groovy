@@ -32,4 +32,6 @@ final class TestSpecs {
 	final static USE_BLUEPRINTS_WITH_NO_BLUEPRINT_CLASS = 'org.gerzog.spock.modelcitizen.test.specs.UseBlueprintsWithNoBlueprintClass'
 
 	final static USE_BLUEPRINTS_WITH_PACKAGE_SCAN = 'org.gerzog.spock.modelcitizen.test.specs.UseBlueprintsWithPackageScan'
+
+	final static SPEC_WITH_SUPER_CLASS = 'org.gerzog.spock.modelcitizen.test.specs.SpecWithSuperclass'
 }
