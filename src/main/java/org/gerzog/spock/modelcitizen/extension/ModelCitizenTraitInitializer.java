@@ -27,7 +27,7 @@ import com.tobedevoured.modelcitizen.ModelFactory;
  */
 public class ModelCitizenTraitInitializer extends AbstractModelCitizenMethodInterceptor {
 
-	private static final String MODEL_FACTORY_FIELD = "modelFactory";
+	private static final String FACTORY_FIELD = "modelFactory";
 
 	public ModelCitizenTraitInitializer(final ModelFactory modelFactory) {
 		super(modelFactory);
@@ -36,7 +36,7 @@ public class ModelCitizenTraitInitializer extends AbstractModelCitizenMethodInte
 	@Override
 	protected void intercept(final Object instance) throws Throwable {
 		if (instance instanceof ModelCitizenTrait) {
-			GroovyRuntimeUtil.setProperty(instance, MODEL_FACTORY_FIELD, getModelFactory());
+			GroovyRuntimeUtil.setProperty(instance, FACTORY_FIELD, getModelFactory());
 		}
 	}
 

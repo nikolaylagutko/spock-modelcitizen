@@ -17,6 +17,7 @@ package org.gerzog.spock.modelcitizen.extension;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.gerzog.spock.modelcitizen.api.Model;
@@ -41,34 +42,32 @@ public class ModelCitizenExtension extends AbstractAnnotationDrivenExtension<Use
 
 	@Override
 	public void visitSpecAnnotation(final UseBlueprints annotation, final SpecInfo spec) {
-		ModelFactory factory = new ModelFactory();
+		final ModelFactory factory = new ModelFactory();
 
 		initializeBlueprints(factory, annotation, spec);
 		registerTraitInitializerInterceptor(factory, spec);
-		registerModelAnnotationInterceptor(factory, spec);
+		registerModelAnnotationInterceptor(factory, spec, getModelFields(spec));
 	}
 
 	private void registerTraitInitializerInterceptor(final ModelFactory factory, final SpecInfo spec) {
 		spec.getInitializerInterceptors().add(0, new ModelCitizenTraitInitializer(factory));
 	}
 
-	private void registerModelAnnotationInterceptor(final ModelFactory factory, final SpecInfo spec) {
-		List<FieldInfo> modelFields = getModelFields(spec);
-
+	private void registerModelAnnotationInterceptor(final ModelFactory factory, final SpecInfo spec, final List<FieldInfo> modelFields) {
 		if (!modelFields.isEmpty()) {
-			validateModelFields(modelFields);
+			validateModelFields(spec.getName(), modelFields);
 
 			spec.addSetupInterceptor(new ModelCitizenMethodInterceptor(factory, modelFields));
 		}
 	}
 
-	private void validateModelFields(final List<FieldInfo> modelFields) {
-		modelFields.forEach(this::validateModelField);
+	private void validateModelFields(final String specName, final List<FieldInfo> modelFields) {
+		modelFields.forEach(field -> validateModelField(specName, field));
 	}
 
-	private void validateModelField(final FieldInfo modelField) {
-		if (modelField.getType().equals(Object.class)) {
-			throw new InvalidSpecException("Object class was detected as @Model source. Please check you didn't use 'def' keyword to define @Model field");
+	private void validateModelField(final String specName, final FieldInfo modelField) {
+		if (Objects.equals(modelField.getType(), Object.class)) {
+			throw new InvalidSpecException("Object class was detected as @Model source in <" + specName + ">. Please check you didn't use 'def' keyword to define @Model field");
 		}
 	}
 
@@ -82,10 +81,10 @@ public class ModelCitizenExtension extends AbstractAnnotationDrivenExtension<Use
 			factory.setRegisterBlueprints(Arrays.asList(annotation.classes()));
 
 			// register blueprints from packages
-			for (String packageName : annotation.packagesToScan()) {
+			for (final String packageName : annotation.packagesToScan()) {
 				factory.setRegisterBlueprintsByPackage(packageName);
 			}
-		} catch (RegisterBlueprintException e) {
+		} catch (final RegisterBlueprintException e) {
 			throw new InvalidSpecException("An error occured during ModelCitizen initialization. Please check your @UseBlueprints configuration for " + spec.getName() + " spec", e);
 		}
 	}

@@ -16,7 +16,8 @@
 package org.gerzog.spock.modelcitizen.extension
 
 import org.gerzog.spock.modelcitizen.internal.ModelCitizenTrait
-import org.gerzog.spock.modelcitizen.test.specs.SampleSpec
+import org.gerzog.spock.modelcitizen.test.SpecCompilationTrait
+import org.gerzog.spock.modelcitizen.test.specs.TestSpecs
 import org.spockframework.runtime.extension.IMethodInvocation
 
 import spock.lang.Specification
@@ -27,7 +28,7 @@ import com.tobedevoured.modelcitizen.ModelFactory
  * @author Nikolay Lagutko (nikolay.lagutko@mail.com)
  *
  */
-class ModelCitizenTraitInitializerSpec extends Specification {
+class ModelCitizenTraitInitializerSpec extends Specification implements SpecCompilationTrait {
 
 	def modelFactory = Mock(ModelFactory)
 
@@ -39,7 +40,7 @@ class ModelCitizenTraitInitializerSpec extends Specification {
 
 	def "check model not initialized for non-traited spec"() {
 		setup:
-		instance = new SampleSpec()
+		instance = newSpec(TestSpecs.SAMPLE_SPEC)
 		and:
 		invocation.instance >> instance
 
@@ -52,7 +53,7 @@ class ModelCitizenTraitInitializerSpec extends Specification {
 
 	def "check model initialized for traited spec"() {
 		setup:
-		instance = new SampleSpec() as ModelCitizenTrait
+		instance = newSpec(TestSpecs.SAMPLE_SPEC, ModelCitizenTrait)
 		and:
 		invocation.instance >> instance
 

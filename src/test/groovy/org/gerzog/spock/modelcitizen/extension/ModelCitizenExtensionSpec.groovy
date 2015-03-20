@@ -16,16 +16,12 @@
 package org.gerzog.spock.modelcitizen.extension
 
 import org.apache.commons.lang.reflect.FieldUtils
+import org.gerzog.spock.modelcitizen.test.SpecCompilationTrait
 import org.gerzog.spock.modelcitizen.test.TestUtilsTrait
 import org.gerzog.spock.modelcitizen.test.data.blueprints1.AnotherBeanBlueprint
 import org.gerzog.spock.modelcitizen.test.data.blueprints1.BeanBlueprint
 import org.gerzog.spock.modelcitizen.test.data.blueprints2.ThirdBeanBlueprint
-import org.gerzog.spock.modelcitizen.test.specs.ModelWithDef
-import org.gerzog.spock.modelcitizen.test.specs.NoModelSpec
-import org.gerzog.spock.modelcitizen.test.specs.SampleSpec
-import org.gerzog.spock.modelcitizen.test.specs.UseBlueprintsWithClasses
-import org.gerzog.spock.modelcitizen.test.specs.UseBlueprintsWithNoBlueprintClass
-import org.gerzog.spock.modelcitizen.test.specs.UseBlueprintsWithPackageScan
+import org.gerzog.spock.modelcitizen.test.specs.TestSpecs
 import org.spockframework.runtime.InvalidSpecException
 import org.spockframework.runtime.extension.IMethodInterceptor
 
@@ -36,24 +32,38 @@ import spock.lang.Unroll
  * @author Nikolay Lagutko (nikolay.lagutko@mail.com)
  *
  */
-class ModelCitizenExtensionSpec extends Specification implements TestUtilsTrait {
+class ModelCitizenExtensionSpec extends Specification implements TestUtilsTrait, SpecCompilationTrait {
 
 	def extension = new ModelCitizenExtension()
 
 	def "check interceptor was added"() {
 		setup:
-		def spec = spec(UseBlueprintsWithClasses)
+		def specClass = compileSpec(TestSpecs.USE_BLUEPRINTS_WITH_CLASSES)
+		def spec = spec(specClass)
 
 		when:
-		applyExtension(UseBlueprintsWithClasses, spec)
+		applyExtension(specClass, spec)
 
 		then:
 		findModelAnnotationInterceptor(spec) != null
 	}
 
-	@Unroll("check blueprints initialized in model factory for #specClass")
-	def "check blueprints initialized in model factory"(specClass, blueprintClasses) {
+	def "check an interceptor was added to spec when annotation used for superclass"() {
 		setup:
+		def specClass = compileSpec(TestSpecs.SPEC_WITH_SUPER_CLASS)
+		def spec = spec(specClass)
+
+		when:
+		applyExtension(specClass, spec)
+
+		then:
+		findModelAnnotationInterceptor(spec) != null
+	}
+
+	@Unroll('check blueprints initialized in model factory for #specClassName')
+	def "check blueprints initialized in model factory"(specClassName, blueprintClasses) {
+		setup:
+		def specClass = compileSpec(specClassName)
 		def spec = spec(specClass)
 
 		when:
@@ -63,12 +73,12 @@ class ModelCitizenExtensionSpec extends Specification implements TestUtilsTrait 
 		validateBlueprints(spec, blueprintClasses)
 
 		where:
-		specClass 						| blueprintClasses
-		UseBlueprintsWithClasses 		| [
+		specClassName 						| blueprintClasses
+		TestSpecs.USE_BLUEPRINTS_WITH_CLASSES 		| [
 			AnotherBeanBlueprint,
 			ThirdBeanBlueprint
 		]
-		UseBlueprintsWithPackageScan 	| [
+		TestSpecs.USE_BLUEPRINTS_WITH_PACKAGE_SCAN	| [
 			BeanBlueprint,
 			AnotherBeanBlueprint,
 			ThirdBeanBlueprint
@@ -77,7 +87,8 @@ class ModelCitizenExtensionSpec extends Specification implements TestUtilsTrait 
 
 	def "check an exception thrown for incorrect model factory config"() {
 		when:
-		applyExtension(UseBlueprintsWithNoBlueprintClass)
+		def specClass = compileSpec(TestSpecs.USE_BLUEPRINTS_WITH_NO_BLUEPRINT_CLASS)
+		applyExtension(specClass)
 
 		then:
 		thrown(InvalidSpecException)
@@ -85,19 +96,21 @@ class ModelCitizenExtensionSpec extends Specification implements TestUtilsTrait 
 
 	def "check an error occured for @Model applied to 'def' field"() {
 		when:
-		applyExtension(ModelWithDef)
+		def specClass = compileSpec(TestSpecs.MODEL_WITH_DEF)
+		applyExtension(specClass)
 
 		then:
 		thrown(InvalidSpecException)
 	}
 
-	def "check method interceptor was applied"(){
+	def "check method interceptor was applied"() {
 		setup:
-		def spec = spec(SampleSpec)
+		def specClass = compileSpec(TestSpecs.SAMPLE_SPEC)
+		def spec = spec(specClass)
 		def fields = modelFields(spec)
 
 		when:
-		applyExtension(SampleSpec, spec)
+		applyExtension(specClass, spec)
 
 		then:
 		FieldUtils.readDeclaredField(findModelAnnotationInterceptor(spec), 'fields', true) == fields
@@ -105,10 +118,11 @@ class ModelCitizenExtensionSpec extends Specification implements TestUtilsTrait 
 
 	def "check no interceptor added for no @Model-containing spec"() {
 		setup:
-		def spec = spec(NoModelSpec)
+		def specClass = compileSpec(TestSpecs.NO_MODEL_SPEC)
+		def spec = spec(specClass)
 
 		when:
-		applyExtension(NoModelSpec, spec)
+		applyExtension(specClass, spec)
 
 		then:
 		findModelAnnotationInterceptor(spec) == null
@@ -116,10 +130,11 @@ class ModelCitizenExtensionSpec extends Specification implements TestUtilsTrait 
 
 	def "check trait initializer was registered"() {
 		setup:
-		def spec = spec(SampleSpec)
+		def specClass = compileSpec(TestSpecs.NO_MODEL_SPEC)
+		def spec = spec(specClass)
 
 		when:
-		applyExtension(SampleSpec, spec)
+		applyExtension(specClass, spec)
 
 		then:
 		findTraitInitializerInterceptor(spec) != null
@@ -127,11 +142,12 @@ class ModelCitizenExtensionSpec extends Specification implements TestUtilsTrait 
 
 	def "check trait initializer is first"() {
 		setup:
-		def spec = spec(SampleSpec)
+		def specClass = compileSpec(TestSpecs.NO_MODEL_SPEC)
+		def spec = spec(specClass)
 		spec.initializerInterceptors << [Mock(IMethodInterceptor)]
 
 		when:
-		applyExtension(SampleSpec, spec)
+		applyExtension(specClass, spec)
 
 		then:
 		spec.initializerInterceptors[0] instanceof ModelCitizenTraitInitializer

@@ -15,7 +15,7 @@
  */
 package org.gerzog.spock.modelcitizen.test.data.blueprints1
 
-import org.gerzog.spock.modelcitizen.test.data.Bean;
+import org.gerzog.spock.modelcitizen.test.data.Bean
 
 import com.tobedevoured.modelcitizen.annotation.Blueprint
 

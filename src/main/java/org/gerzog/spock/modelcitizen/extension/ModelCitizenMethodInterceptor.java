@@ -50,10 +50,10 @@ public class ModelCitizenMethodInterceptor extends AbstractModelCitizenMethodInt
 
 	private void initializeModel(final Object target, final FieldInfo field) {
 		try {
-			Object value = generateFixture(field);
+			final Object value = generateFixture(field);
 
 			field.writeValue(target, value);
-		} catch (CreateModelException e) {
+		} catch (final CreateModelException e) {
 			throw new InvalidSpecException("", e);
 		}
 	}

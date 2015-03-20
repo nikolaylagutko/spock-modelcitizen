@@ -16,6 +16,10 @@
 package org.gerzog.spock.modelcitizen.test
 
 import groovy.transform.Trait
+
+import org.apache.commons.io.IOUtils
+import org.codehaus.groovy.runtime.DefaultGroovyMethods
+
 import spock.lang.Specification
 import spock.util.EmbeddedSpecCompiler
 
@@ -32,10 +36,39 @@ class SpecCompilationTrait {
 
 	def imports(imports) {
 		imports << Specification
-		imports.forEach {compiler.addClassImport(it)}
+		imports.forEach { compiler.addClassImport(it) }
 	}
 
-	def compile(text) {
-		compiler.compile(text).first()
+	def compile(text, name = null) {
+		def classes = compiler.compile(text)
+
+		if (name == null) {
+			classes.first()
+		} else {
+			classes.findAll { it.simpleName == name || it.name == name }.first()
+		}
+	}
+
+	def compileSpec(name) {
+		def specText
+		SpecCompilationTrait.getResource('/' + convertClassNameToPath(name)).withInputStream {
+			specText = IOUtils.toString(it)
+		}
+
+		compile(specText, name)
+	}
+
+	def newSpec(name, traitClass = null) {
+		def result = compileSpec(name).newInstance()
+
+		if (traitClass != null) {
+			result = DefaultGroovyMethods.asType(result, traitClass)
+		}
+
+		result
+	}
+
+	def convertClassNameToPath(name) {
+		name.replace('.', File.separator) + '.groovy'
 	}
 }

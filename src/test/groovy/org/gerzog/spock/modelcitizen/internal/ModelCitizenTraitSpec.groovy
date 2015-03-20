@@ -15,8 +15,6 @@
  */
 package org.gerzog.spock.modelcitizen.internal
 
-import org.gerzog.spock.modelcitizen.internal.ModelCitizenTrait;
-
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -45,6 +43,6 @@ class ModelCitizenTraitSpec extends Specification {
 		1 * modelFactory.createModel(template)
 
 		where:
-		template << [Object.class, new Object()]
+		template << [Object, new Object()]
 	}
 }

@@ -34,12 +34,12 @@ public class ApplyModelCitizenTraitASTTransformation extends AbstractASTTransfor
 
 	private static final String TRAIT_ENABLING_FLAG = "enableTrait";
 
-	private static final ClassNode MODELCITIZEN_TRAIT = ClassHelper.makeWithoutCaching(ModelCitizenTrait.class);
+	private static final ClassNode TRAIT_CLASS_NODE = ClassHelper.makeWithoutCaching(ModelCitizenTrait.class);
 
 	@Override
 	public void visit(final ASTNode[] nodes, final SourceUnit source) {
-		AnnotationNode annotation = (AnnotationNode) nodes[0];
-		ClassNode parent = (ClassNode) nodes[1];
+		final AnnotationNode annotation = (AnnotationNode) nodes[0];
+		final ClassNode parent = (ClassNode) nodes[1];
 
 		if (isEnabled(annotation)) {
 			parent.addInterface(MODELCITIZEN_TRAIT);

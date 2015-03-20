@@ -15,6 +15,7 @@
  */
 package org.gerzog.spock.modelcitizen.internal
 
+import groovy.transform.PackageScope
 import groovy.transform.Trait
 
 import com.tobedevoured.modelcitizen.ModelFactory
@@ -28,7 +29,7 @@ class ModelCitizenTrait {
 
 	ModelFactory modelFactory
 
-	def model(template) {
+	@PackageScope <T> T model(template) {
 		modelFactory.createModel(template)
 	}
 }

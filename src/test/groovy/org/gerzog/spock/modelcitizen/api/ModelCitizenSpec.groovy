@@ -26,11 +26,9 @@ import spock.lang.Specification
  */
 class ModelCitizenSpec extends Specification implements SpecCompilationTrait {
 
-	def spec = """
-		@ModelCitizen
-		class TraitedSpec extends Specification {
-		}
-		"""
+	def spec = '@ModelCitizen class TraitedSpec extends Specification { }'
+
+	def abstractSpec  = '@ModelCitizen abstract class TraitedSpec extends Specification { }'
 
 	def setup() {
 		imports([ModelCitizen])
@@ -39,6 +37,14 @@ class ModelCitizenSpec extends Specification implements SpecCompilationTrait {
 	def "check a trait was added for spec"() {
 		when:
 		def result = compile(spec)
+
+		then:
+		ModelCitizenTrait.isAssignableFrom(result)
+	}
+
+	def "check a trait was added for abstract spec"() {
+		when:
+		def result = compile(abstractSpec, 'TraitedSpec')
 
 		then:
 		ModelCitizenTrait.isAssignableFrom(result)

@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2015 Nikolay Lagutko <nikolay.lagutko@mail.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,18 +16,22 @@
 package org.gerzog.spock.modelcitizen.test.specs
 
 import org.gerzog.spock.modelcitizen.api.Model
-import org.gerzog.spock.modelcitizen.api.ModelCitizen
+import org.gerzog.spock.modelcitizen.extension.UseBlueprints
 import org.gerzog.spock.modelcitizen.test.data.Bean
+import org.gerzog.spock.modelcitizen.test.data.blueprints1.AnotherBeanBlueprint
+import org.gerzog.spock.modelcitizen.test.data.blueprints2.ThirdBeanBlueprint
 
 import spock.lang.Specification
-
 
 /**
  * @author Nikolay Lagutko (nikolay.lagutko@mail.com)
  *
  */
-@ModelCitizen(classes = Bean)
-class UseBlueprintsWithNoBlueprintClass extends Specification {
+@UseBlueprints(classes = [AnotherBeanBlueprint, ThirdBeanBlueprint])
+abstract class AbstractSpec extends Specification {
+}
+
+class SpecWithSuperclass extends AbstractSpec {
 
 	@Model
 	Bean model
