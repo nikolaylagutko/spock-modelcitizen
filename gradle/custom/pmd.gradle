@@ -6,8 +6,8 @@ dependencies {
 
 pmd {
 	toolVersion = pmdVersion
-	ruleSets = [ 
-		'java-basic', 
+	ruleSetFiles = files('config/pmd/basic.xml', 'config/pmd/unnecessary.xml')
+	ruleSets = [  
 		'java-braces', 
 		'java-clone', 
 		'java-codesize', 
@@ -19,7 +19,6 @@ pmd {
 		'java-strictexception',
 		'java-strings',
 		'java-typeresolution',
-		'java-unnecessary',
 		'java-unusedcode' 
 	]
 }

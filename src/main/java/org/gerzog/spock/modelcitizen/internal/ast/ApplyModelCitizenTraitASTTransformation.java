@@ -32,7 +32,7 @@ import org.gerzog.spock.modelcitizen.internal.ModelCitizenTrait;
 @GroovyASTTransformation(phase = CompilePhase.SEMANTIC_ANALYSIS)
 public class ApplyModelCitizenTraitASTTransformation extends AbstractASTTransformation {
 
-	private static final String TRAIT_ENABLING_FLAG = "enableTrait";
+	private static final String FLAG_FIELD = "enableTrait";
 
 	private static final ClassNode TRAIT_CLASS_NODE = ClassHelper.makeWithoutCaching(ModelCitizenTrait.class);
 
@@ -42,12 +42,12 @@ public class ApplyModelCitizenTraitASTTransformation extends AbstractASTTransfor
 		final ClassNode parent = (ClassNode) nodes[1];
 
 		if (isEnabled(annotation)) {
-			parent.addInterface(MODELCITIZEN_TRAIT);
+			parent.addInterface(TRAIT_CLASS_NODE);
 		}
 	}
 
 	private boolean isEnabled(final AnnotationNode annotation) {
-		String flagValue = getMemberStringValue(annotation, TRAIT_ENABLING_FLAG);
+		final String flagValue = getMemberStringValue(annotation, FLAG_FIELD);
 		return (flagValue == null) || Boolean.parseBoolean(flagValue);
 	}
 }

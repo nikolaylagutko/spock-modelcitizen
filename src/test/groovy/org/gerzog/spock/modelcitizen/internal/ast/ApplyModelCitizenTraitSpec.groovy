@@ -30,11 +30,7 @@ class ApplyModelCitizenTraitSpec extends Specification implements SpecCompilatio
 
 	def spec = '@ApplyModelCitizenTrait class TraitedSpec extends Specification { }'
 
-	def untraitedSpec = """
-		@ApplyModelCitizenTrait(enableTrait = false)
-		class TraitedSpec extends Specification {
-		}
-		"""
+	def untraitedSpec = '@ApplyModelCitizenTrait(enableTrait = false) class TraitedSpec extends Specification { }'
 
 	def modelFactory = Mock(ModelFactory)
 
