@@ -30,7 +30,7 @@ class ModelCitizenTrait {
 	ModelFactory modelFactory
 
 	@PackageScope <T> T model(template, properties = []) {
-		def result = modelFactory.createModel(template)
+		T result = modelFactory.createModel(template)
 
 		if (properties) {
 			properties.forEach { key, value ->

@@ -29,6 +29,8 @@ import com.tobedevoured.modelcitizen.ModelFactory
  */
 class ModelCitizenTraitSpec extends Specification {
 
+	final static FIELD_VALUE = 'value'
+
 	def modelFactory = Mock(ModelFactory)
 
 	def modelCitizenTrait = new Object() as ModelCitizenTrait
@@ -55,10 +57,10 @@ class ModelCitizenTraitSpec extends Specification {
 		modelFactory.createModel(_) >> instance
 
 		when:
-		modelCitizenTrait.model(BeanBlueprint, [property: 'value'])
+		modelCitizenTrait.model(BeanBlueprint, [ property:FIELD_VALUE ])
 
 		then:
-		instance.property == 'value'
+		instance.property == FIELD_VALUE
 	}
 
 	def "check null is not causing error"() {

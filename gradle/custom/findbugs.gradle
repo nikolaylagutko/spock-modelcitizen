@@ -1,6 +1,7 @@
 apply plugin: 'findbugs'
 
 findbugs {
+	excludeFilter = file('config/findbugs/exclude.xml')
 	toolVersion = findbugsVersion
 	effort = 'max'
 }
