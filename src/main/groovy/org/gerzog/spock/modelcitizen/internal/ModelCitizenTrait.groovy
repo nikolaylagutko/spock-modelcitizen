@@ -29,7 +29,15 @@ class ModelCitizenTrait {
 
 	ModelFactory modelFactory
 
-	@PackageScope <T> T model(template) {
-		modelFactory.createModel(template)
+	@PackageScope <T> T model(template, properties = []) {
+		T result = modelFactory.createModel(template)
+
+		if (properties) {
+			properties.forEach { key, value ->
+				result."$key" = value
+			}
+		}
+
+		result
 	}
 }

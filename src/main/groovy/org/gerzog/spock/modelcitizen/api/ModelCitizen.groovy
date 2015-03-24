@@ -17,13 +17,12 @@ package org.gerzog.spock.modelcitizen.api
 
 import groovy.transform.AnnotationCollector
 
-import org.gerzog.spock.modelcitizen.extension.UseBlueprints
 import org.gerzog.spock.modelcitizen.internal.ast.ApplyModelCitizenTrait
 
 /**
  * @author Nikolay Lagutko (nikolay.lagutko@mail.com)
  *
  */
-@AnnotationCollector([UseBlueprints, ApplyModelCitizenTrait])
+@AnnotationCollector([ModelCitizenBlueprints, ApplyModelCitizenTrait])
 @interface ModelCitizen {
 }

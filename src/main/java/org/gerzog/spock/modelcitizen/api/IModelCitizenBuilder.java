@@ -15,26 +15,22 @@
  */
 package org.gerzog.spock.modelcitizen.api;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import com.tobedevoured.modelcitizen.ModelFactory;
+import com.tobedevoured.modelcitizen.ModelFactoryException;
+import com.tobedevoured.modelcitizen.policy.Policy;
 
 /**
- * Marks fields to be initialized by corresponding Blueprint
- *
- * Blueprint will be selected by field's type
- *
  * @author Nikolay Lagutko (nikolay.lagutko@mail.com)
  *
  */
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.FIELD)
-public @interface Model {
+public interface IModelCitizenBuilder {
 
-	static final class DEFAULT {
-	}
+	IModelCitizenBuilder withPolicies(Policy... policies);
 
-	Class<?> target() default DEFAULT.class;
+	IModelCitizenBuilder fromPackages(String... packages);
+
+	IModelCitizenBuilder fromClasses(Class<?>... classes);
+
+	ModelFactory build() throws ModelFactoryException;
 
 }

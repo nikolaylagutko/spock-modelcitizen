@@ -19,9 +19,13 @@ package org.gerzog.spock.modelcitizen.test.specs
  * @author Nikolay Lagutko (nikolay.lagutko@mail.com)
  *
  */
-final class TestSpecs {
+final class TestConstants {
 
 	final static MODEL_WITH_DEF = 'org.gerzog.spock.modelcitizen.test.specs.ModelWithDef'
+
+	final static MODEL_WITH_TARGET = 'org.gerzog.spock.modelcitizen.test.specs.ModelWithTarget'
+
+	final static INCOMPATIBLE_CLASSES = 'org.gerzog.spock.modelcitizen.test.specs.IncompatibleClasses'
 
 	final static NO_MODEL_SPEC = 'org.gerzog.spock.modelcitizen.test.specs.NoModelSpec'
 
@@ -34,4 +38,16 @@ final class TestSpecs {
 	final static USE_BLUEPRINTS_WITH_PACKAGE_SCAN = 'org.gerzog.spock.modelcitizen.test.specs.UseBlueprintsWithPackageScan'
 
 	final static SPEC_WITH_SUPER_CLASS = 'org.gerzog.spock.modelcitizen.test.specs.SpecWithSuperclass'
+
+	final static BLUEPRINT_PACKAGE_1 = 'org.gerzog.spock.modelcitizen.test.data.blueprints1'
+
+	final static BLUEPRINT_PACKAGE_2 = 'org.gerzog.spock.modelcitizen.test.data.blueprints2'
+
+	final static CUSTOM_CONFIGURAR_SPEC = 'org.gerzog.spock.modelcitizen.test.specs.CustomConfigurarSpec'
+
+	final static NULL_CONFIGURAR_SPEC = 'org.gerzog.spock.modelcitizen.test.specs.NullConfigurarSpec'
+
+	final static ERROR_CONFIGURAR_SPEC = 'org.gerzog.spock.modelcitizen.test.specs.ErrorConfigurarSpec'
+
+	final static UNCREATABLE_CONFIGURAR_SPEC = 'org.gerzog.spock.modelcitizen.test.specs.UncreatableConfigurarSpec'
 }

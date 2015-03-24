@@ -13,28 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.gerzog.spock.modelcitizen.api;
+package org.gerzog.spock.modelcitizen.configurar;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import org.gerzog.spock.modelcitizen.api.IModelCitizenBuilder;
+import org.gerzog.spock.modelcitizen.api.IModelCitizenConfigurar;
+import org.gerzog.spock.modelcitizen.api.ModelCitizenBlueprints;
 
 /**
- * Marks fields to be initialized by corresponding Blueprint
- *
- * Blueprint will be selected by field's type
- *
  * @author Nikolay Lagutko (nikolay.lagutko@mail.com)
  *
  */
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.FIELD)
-public @interface Model {
+public class DefaultModelCitizenConfigurar implements IModelCitizenConfigurar {
 
-	static final class DEFAULT {
+	@Override
+	public void configure(final ModelCitizenBlueprints annotation, final IModelCitizenBuilder builder) {
+		builder.fromClasses(annotation.classes());
+		builder.fromPackages(annotation.packagesToScan());
 	}
-
-	Class<?> target() default DEFAULT.class;
 
 }

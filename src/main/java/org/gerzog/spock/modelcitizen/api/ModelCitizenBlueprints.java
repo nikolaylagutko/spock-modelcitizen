@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.gerzog.spock.modelcitizen.extension;
+package org.gerzog.spock.modelcitizen.api;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;
@@ -21,6 +21,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.gerzog.spock.modelcitizen.configurar.DefaultModelCitizenConfigurar;
+import org.gerzog.spock.modelcitizen.extension.ModelCitizenExtension;
 import org.spockframework.runtime.extension.ExtensionAnnotation;
 
 /**
@@ -33,7 +35,7 @@ import org.spockframework.runtime.extension.ExtensionAnnotation;
 @Target(ElementType.TYPE)
 @ExtensionAnnotation(ModelCitizenExtension.class)
 @Inherited
-@interface UseBlueprints {
+public @interface ModelCitizenBlueprints {
 
 	/**
 	 * Classes to be registered as Blueprints
@@ -44,5 +46,10 @@ import org.spockframework.runtime.extension.ExtensionAnnotation;
 	 * Package names to scan for Blueprint classes
 	 */
 	String[] packagesToScan() default {};
+
+	/**
+	 * Configurar class for ModelFactory
+	 */
+	Class<? extends IModelCitizenConfigurar> configurar() default DefaultModelCitizenConfigurar.class;
 
 }

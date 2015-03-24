@@ -13,28 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.gerzog.spock.modelcitizen.api;
+package org.gerzog.spock.modelcitizen.test.specs
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import org.gerzog.spock.modelcitizen.api.Model
+import org.gerzog.spock.modelcitizen.api.ModelCitizenBlueprints
+import org.gerzog.spock.modelcitizen.test.data.Bean
+
+import spock.lang.Specification
 
 /**
- * Marks fields to be initialized by corresponding Blueprint
- *
- * Blueprint will be selected by field's type
- *
  * @author Nikolay Lagutko (nikolay.lagutko@mail.com)
  *
  */
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.FIELD)
-public @interface Model {
+@ModelCitizenBlueprints
+class IncompatibleClasses extends Specification {
 
-	static final class DEFAULT {
-	}
-
-	Class<?> target() default DEFAULT.class;
-
+	@Model(target = Bean)
+	String model
 }

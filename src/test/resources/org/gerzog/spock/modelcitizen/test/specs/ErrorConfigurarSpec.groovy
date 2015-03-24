@@ -15,8 +15,10 @@
  */
 package org.gerzog.spock.modelcitizen.test.specs
 
+import org.gerzog.spock.modelcitizen.api.IModelCitizenBuilder
+import org.gerzog.spock.modelcitizen.api.IModelCitizenConfigurar
 import org.gerzog.spock.modelcitizen.api.Model
-import org.gerzog.spock.modelcitizen.api.ModelCitizenBlueprints;
+import org.gerzog.spock.modelcitizen.api.ModelCitizenBlueprints
 import org.gerzog.spock.modelcitizen.test.data.Bean
 
 import spock.lang.Specification
@@ -26,9 +28,19 @@ import spock.lang.Specification
  * @author Nikolay Lagutko (nikolay.lagutko@mail.com)
  *
  */
-@ModelCitizenBlueprints(classes = Bean)
-class UseBlueprintsWithNoBlueprintClass extends Specification {
+@ModelCitizenBlueprints(configurar = CustomConfigurar)
+class ErrorConfigurarSpec extends Specification {
+
+	static class CustomConfigurar implements IModelCitizenConfigurar {
+
+		@Override
+		void configure(ModelCitizenBlueprints annotation, IModelCitizenBuilder builder) {
+			throw new NullPointerException()
+		}
+	}
 
 	@Model
 	Bean model
+
+	Bean notModel
 }

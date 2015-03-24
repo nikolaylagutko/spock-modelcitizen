@@ -15,9 +15,13 @@
  */
 package org.gerzog.spock.modelcitizen.test.specs
 
+import org.gerzog.spock.modelcitizen.api.IModelCitizenBuilder
+import org.gerzog.spock.modelcitizen.api.IModelCitizenConfigurar
 import org.gerzog.spock.modelcitizen.api.Model
-import org.gerzog.spock.modelcitizen.api.ModelCitizenBlueprints;
+import org.gerzog.spock.modelcitizen.api.ModelCitizenBlueprints
 import org.gerzog.spock.modelcitizen.test.data.Bean
+import org.gerzog.spock.modelcitizen.test.data.blueprints1.AnotherBeanBlueprint
+import org.gerzog.spock.modelcitizen.test.data.blueprints2.ThirdBeanBlueprint
 
 import spock.lang.Specification
 
@@ -26,9 +30,19 @@ import spock.lang.Specification
  * @author Nikolay Lagutko (nikolay.lagutko@mail.com)
  *
  */
-@ModelCitizenBlueprints(classes = Bean)
-class UseBlueprintsWithNoBlueprintClass extends Specification {
+@ModelCitizenBlueprints(configurar = CustomConfigurar)
+class CustomConfigurarSpec extends Specification {
+
+	static class CustomConfigurar implements IModelCitizenConfigurar {
+
+		@Override
+		void configure(ModelCitizenBlueprints annotation, IModelCitizenBuilder builder) {
+			builder.fromClasses(AnotherBeanBlueprint, ThirdBeanBlueprint)
+		}
+	}
 
 	@Model
 	Bean model
+
+	Bean notModel
 }

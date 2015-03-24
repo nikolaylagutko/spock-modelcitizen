@@ -15,6 +15,9 @@
  */
 package org.gerzog.spock.modelcitizen.internal
 
+import org.gerzog.spock.modelcitizen.test.data.Bean
+import org.gerzog.spock.modelcitizen.test.data.blueprints1.BeanBlueprint
+
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -25,6 +28,8 @@ import com.tobedevoured.modelcitizen.ModelFactory
  *
  */
 class ModelCitizenTraitSpec extends Specification {
+
+	final static FIELD_VALUE = 'value'
 
 	def modelFactory = Mock(ModelFactory)
 
@@ -44,5 +49,25 @@ class ModelCitizenTraitSpec extends Specification {
 
 		where:
 		template << [Object, new Object()]
+	}
+
+	def "check model creating with field overwriting"() {
+		setup:
+		def instance = new Bean()
+		modelFactory.createModel(_) >> instance
+
+		when:
+		modelCitizenTrait.model(BeanBlueprint, [ property:FIELD_VALUE ])
+
+		then:
+		instance.property == FIELD_VALUE
+	}
+
+	def "check null is not causing error"() {
+		when:
+		modelCitizenTrait.model(BeanBlueprint, null)
+
+		then:
+		noExceptionThrown()
 	}
 }
