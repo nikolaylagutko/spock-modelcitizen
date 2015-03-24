@@ -94,10 +94,6 @@ public class ModelCitizenExtension extends AbstractAnnotationDrivenExtension<Mod
 	private IModelCitizenConfigurar createConfigurar(final ModelCitizenBlueprints annotation, final SpecInfo spec) {
 		final Class<? extends IModelCitizenConfigurar> configurar = annotation.configurar();
 
-		if (configurar == null) {
-			throw new InvalidSpecException("Configurar for @ModelCitizen in spec <" + spec.getName() + "> cannot be null");
-		}
-
 		try {
 			return configurar.newInstance();
 		} catch (InstantiationException | IllegalAccessException e) {
