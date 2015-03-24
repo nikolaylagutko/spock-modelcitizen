@@ -44,7 +44,7 @@ public class ModelCitizenExtension extends AbstractAnnotationDrivenExtension<Mod
 
 	@Override
 	public void visitSpecAnnotation(final ModelCitizenBlueprints annotation, final SpecInfo spec) {
-		if (spec.getIsTopSpec()) {
+		if (spec.getIsBottomSpec()) {
 			final ModelFactory factory = initializeFactory(annotation, spec);
 
 			registerTraitInitializerInterceptor(factory, spec);
