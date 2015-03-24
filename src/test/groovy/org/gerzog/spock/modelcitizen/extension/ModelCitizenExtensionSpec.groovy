@@ -84,6 +84,10 @@ class ModelCitizenExtensionSpec extends Specification implements TestUtilsTrait,
 			AnotherBeanBlueprint,
 			ThirdBeanBlueprint
 		]
+		TestConstants.CUSTOM_CONFIGURAR_SPEC 		| [
+			AnotherBeanBlueprint,
+			ThirdBeanBlueprint
+		]
 	}
 
 	def "check an exception thrown for incorrect model factory config"() {
@@ -98,6 +102,33 @@ class ModelCitizenExtensionSpec extends Specification implements TestUtilsTrait,
 	def "check an error occured for @Model applied to 'def' field"() {
 		when:
 		def specClass = compileSpec(TestConstants.MODEL_WITH_DEF)
+		applyExtension(specClass)
+
+		then:
+		thrown(InvalidSpecException)
+	}
+
+	def "check an error occured if configurar incorrect"() {
+		when:
+		def specClass = compileSpec(TestConstants.NULL_CONFIGURAR_SPEC)
+		applyExtension(specClass)
+
+		then:
+		thrown(InvalidSpecException)
+	}
+
+	def "check an error occured if configurar throws exception"() {
+		when:
+		def specClass = compileSpec(TestConstants.ERROR_CONFIGURAR_SPEC)
+		applyExtension(specClass)
+
+		then:
+		thrown(InvalidSpecException)
+	}
+
+	def "check an error occured if configurar cannot be created"() {
+		when:
+		def specClass = compileSpec(TestConstants.UNCREATABLE_CONFIGURAR_SPEC)
 		applyExtension(specClass)
 
 		then:

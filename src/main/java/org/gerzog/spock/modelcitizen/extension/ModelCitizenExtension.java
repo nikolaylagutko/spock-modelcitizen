@@ -15,20 +15,21 @@
  */
 package org.gerzog.spock.modelcitizen.extension;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import org.gerzog.spock.modelcitizen.api.IModelCitizenConfigurar;
 import org.gerzog.spock.modelcitizen.api.Model;
 import org.gerzog.spock.modelcitizen.api.ModelCitizenBlueprints;
+import org.gerzog.spock.modelcitizen.configurar.ModelCitizenBuilder;
 import org.spockframework.runtime.InvalidSpecException;
 import org.spockframework.runtime.extension.AbstractAnnotationDrivenExtension;
 import org.spockframework.runtime.model.FieldInfo;
 import org.spockframework.runtime.model.SpecInfo;
 
 import com.tobedevoured.modelcitizen.ModelFactory;
-import com.tobedevoured.modelcitizen.RegisterBlueprintException;
+import com.tobedevoured.modelcitizen.ModelFactoryException;
 
 /**
  * Extension's entry point
@@ -43,9 +44,8 @@ public class ModelCitizenExtension extends AbstractAnnotationDrivenExtension<Mod
 
 	@Override
 	public void visitSpecAnnotation(final ModelCitizenBlueprints annotation, final SpecInfo spec) {
-		final ModelFactory factory = new ModelFactory();
+		final ModelFactory factory = initializeFactory(annotation, spec);
 
-		initializeBlueprints(factory, annotation, spec);
 		registerTraitInitializerInterceptor(factory, spec);
 		registerModelAnnotationInterceptor(factory, spec, getModelFields(spec));
 	}
@@ -76,17 +76,32 @@ public class ModelCitizenExtension extends AbstractAnnotationDrivenExtension<Mod
 		return spec.getAllFields().stream().filter(field -> field.isAnnotationPresent(Model.class)).collect(Collectors.toList());
 	}
 
-	private void initializeBlueprints(final ModelFactory factory, final ModelCitizenBlueprints annotation, final SpecInfo spec) {
+	private ModelFactory initializeFactory(final ModelCitizenBlueprints annotation, final SpecInfo spec) {
 		try {
-			// register blueprints from classes
-			factory.setRegisterBlueprints(Arrays.asList(annotation.classes()));
+			final IModelCitizenConfigurar configurar = createConfigurar(annotation, spec);
+			final ModelCitizenBuilder builder = new ModelCitizenBuilder();
 
-			// register blueprints from packages
-			for (final String packageName : annotation.packagesToScan()) {
-				factory.setRegisterBlueprintsByPackage(packageName);
-			}
-		} catch (final RegisterBlueprintException e) {
+			configurar.configure(annotation, builder);
+
+			return builder.build();
+		} catch (final ModelFactoryException e) {
 			throw new InvalidSpecException("An error occured during ModelCitizen initialization. Please check your @UseBlueprints configuration for " + spec.getName() + " spec", e);
+		} catch (final Exception e) {
+			throw new InvalidSpecException("An error occured during configuring ModelCitizen factory for spec <" + spec.getName() + ">", e);
+		}
+	}
+
+	private IModelCitizenConfigurar createConfigurar(final ModelCitizenBlueprints annotation, final SpecInfo spec) {
+		final Class<? extends IModelCitizenConfigurar> configurar = annotation.configurar();
+
+		if (configurar == null) {
+			throw new InvalidSpecException("Configurar for @ModelCitizen in spec <" + spec.getName() + "> cannot be null");
+		}
+
+		try {
+			return configurar.newInstance();
+		} catch (InstantiationException | IllegalAccessException e) {
+			throw new InvalidSpecException("Cannot create configurar for spec <" + spec.getName() + ">", e);
 		}
 	}
 }

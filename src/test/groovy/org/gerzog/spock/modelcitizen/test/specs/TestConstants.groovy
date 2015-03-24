@@ -38,4 +38,12 @@ final class TestConstants {
 	final static BLUEPRINT_PACKAGE_1 = 'org.gerzog.spock.modelcitizen.test.data.blueprints1'
 
 	final static BLUEPRINT_PACKAGE_2 = 'org.gerzog.spock.modelcitizen.test.data.blueprints2'
+
+	final static CUSTOM_CONFIGURAR_SPEC = 'org.gerzog.spock.modelcitizen.test.specs.CustomConfigurarSpec'
+
+	final static NULL_CONFIGURAR_SPEC = 'org.gerzog.spock.modelcitizen.test.specs.NullConfigurarSpec'
+
+	final static ERROR_CONFIGURAR_SPEC = 'org.gerzog.spock.modelcitizen.test.specs.ErrorConfigurarSpec'
+
+	final static UNCREATABLE_CONFIGURAR_SPEC = 'org.gerzog.spock.modelcitizen.test.specs.UncreatableConfigurarSpec'
 }
