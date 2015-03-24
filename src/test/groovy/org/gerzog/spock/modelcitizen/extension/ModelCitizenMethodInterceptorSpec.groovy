@@ -57,6 +57,18 @@ class ModelCitizenMethodInterceptorSpec extends Specification implements TestUti
 		1 * modelFactory.createModel(Bean)
 	}
 
+	def "check model factory was called for model fields initialization by @Model's target value"() {
+		setup:
+		def specClass = compileSpec(TestConstants.MODEL_WITH_TARGET)
+		def spec = spec(specClass)
+
+		when:
+		callInterceptor(spec)
+
+		then:
+		1 * modelFactory.createModel(Bean)
+	}
+
 	def "check spec exception occurs if model factory raises error"() {
 		setup:
 		def specClass = compileSpec(TestConstants.SAMPLE_SPEC)
@@ -94,8 +106,20 @@ class ModelCitizenMethodInterceptorSpec extends Specification implements TestUti
 		1 * invocation.proceed()
 	}
 
+	def "check an error raised if @Model's target class is incompatible to field's type"() {
+		setup:
+		def specClass = compileSpec(TestConstants.INCOMPATIBLE_CLASSES)
+		def spec = spec(specClass)
+
+		when:
+		callInterceptor(spec)
+
+		then:
+		thrown(InvalidSpecException)
+	}
+
 	private void validateValue(spec) {
-		def modelField = modelFields(spec).findResult { it.name == 'model' ? it : null }
+		def modelField = modelFields(spec).findResult { it.key.name == 'model' ? it.key : null }
 
 		assert modelField.readValue(target) == model
 	}

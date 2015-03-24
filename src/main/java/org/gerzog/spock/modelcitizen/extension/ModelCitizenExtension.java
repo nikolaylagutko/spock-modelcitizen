@@ -15,7 +15,7 @@
  */
 package org.gerzog.spock.modelcitizen.extension;
 
-import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -54,7 +54,7 @@ public class ModelCitizenExtension extends AbstractAnnotationDrivenExtension<Mod
 		spec.getInitializerInterceptors().add(0, new ModelCitizenTraitInitializer(factory));
 	}
 
-	private void registerModelAnnotationInterceptor(final ModelFactory factory, final SpecInfo spec, final List<FieldInfo> modelFields) {
+	private void registerModelAnnotationInterceptor(final ModelFactory factory, final SpecInfo spec, final Map<FieldInfo, Model> modelFields) {
 		if (!modelFields.isEmpty()) {
 			validateModelFields(spec.getName(), modelFields);
 
@@ -62,18 +62,18 @@ public class ModelCitizenExtension extends AbstractAnnotationDrivenExtension<Mod
 		}
 	}
 
-	private void validateModelFields(final String specName, final List<FieldInfo> modelFields) {
-		modelFields.forEach(field -> validateModelField(specName, field));
+	private void validateModelFields(final String specName, final Map<FieldInfo, Model> modelFields) {
+		modelFields.forEach((field, annotation) -> validateModelField(specName, field, annotation));
 	}
 
-	private void validateModelField(final String specName, final FieldInfo modelField) {
-		if (Objects.equals(modelField.getType(), Object.class)) {
-			throw new InvalidSpecException("Object class was detected as @Model source in <" + specName + ">. Please check you didn't use 'def' keyword to define @Model field");
+	private void validateModelField(final String specName, final FieldInfo modelField, final Model annotation) {
+		if (Objects.equals(modelField.getType(), Object.class) && annotation.target().equals(Model.DEFAULT.class)) {
+			throw new InvalidSpecException("Object class was detected as @Model source in <" + specName + ">. Please check you declared field type or set target of @Model field");
 		}
 	}
 
-	private List<FieldInfo> getModelFields(final SpecInfo spec) {
-		return spec.getAllFields().stream().filter(field -> field.isAnnotationPresent(Model.class)).collect(Collectors.toList());
+	private Map<FieldInfo, Model> getModelFields(final SpecInfo spec) {
+		return spec.getAllFields().stream().filter(field -> field.isAnnotationPresent(Model.class)).collect(Collectors.toMap(field -> field, field -> field.getAnnotation(Model.class)));
 	}
 
 	private ModelFactory initializeFactory(final ModelCitizenBlueprints annotation, final SpecInfo spec) {

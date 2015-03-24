@@ -32,7 +32,7 @@ class TestUtilsTrait {
 	}
 
 	def modelFields(spec) {
-		allFields(spec).findAll { it.isAnnotationPresent(Model) }
+		allFields(spec).findAll { it.isAnnotationPresent(Model) }.collectEntries { [(it) : it.getAnnotation(Model)] }
 	}
 
 	def spec(specClass) {

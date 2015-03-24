@@ -23,6 +23,10 @@ final class TestConstants {
 
 	final static MODEL_WITH_DEF = 'org.gerzog.spock.modelcitizen.test.specs.ModelWithDef'
 
+	final static MODEL_WITH_TARGET = 'org.gerzog.spock.modelcitizen.test.specs.ModelWithTarget'
+
+	final static INCOMPATIBLE_CLASSES = 'org.gerzog.spock.modelcitizen.test.specs.IncompatibleClasses'
+
 	final static NO_MODEL_SPEC = 'org.gerzog.spock.modelcitizen.test.specs.NoModelSpec'
 
 	final static SAMPLE_SPEC = 'org.gerzog.spock.modelcitizen.test.specs.SampleSpec'

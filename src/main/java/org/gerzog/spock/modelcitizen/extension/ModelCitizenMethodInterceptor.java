@@ -15,8 +15,9 @@
  */
 package org.gerzog.spock.modelcitizen.extension;
 
-import java.util.List;
+import java.util.Map;
 
+import org.gerzog.spock.modelcitizen.api.Model;
 import org.gerzog.spock.modelcitizen.extension.internal.AbstractModelCitizenMethodInterceptor;
 import org.spockframework.runtime.InvalidSpecException;
 import org.spockframework.runtime.model.FieldInfo;
@@ -36,21 +37,21 @@ import com.tobedevoured.modelcitizen.ModelFactory;
  */
 public class ModelCitizenMethodInterceptor extends AbstractModelCitizenMethodInterceptor {
 
-	private final List<FieldInfo> fields;
+	private final Map<FieldInfo, Model> fields;
 
-	public ModelCitizenMethodInterceptor(final ModelFactory modelFactory, final List<FieldInfo> fields) {
+	public ModelCitizenMethodInterceptor(final ModelFactory modelFactory, final Map<FieldInfo, Model> fields) {
 		super(modelFactory);
 		this.fields = fields;
 	}
 
 	@Override
 	public void intercept(final Object instance) throws Throwable {
-		fields.forEach(field -> initializeModel(instance, field));
+		fields.forEach((field, annotation) -> initializeModel(instance, field, annotation));
 	}
 
-	private void initializeModel(final Object target, final FieldInfo field) {
+	private void initializeModel(final Object target, final FieldInfo field, final Model annotation) {
 		try {
-			final Object value = generateFixture(field);
+			final Object value = generateFixture(field, annotation);
 
 			field.writeValue(target, value);
 		} catch (final CreateModelException e) {
@@ -58,8 +59,30 @@ public class ModelCitizenMethodInterceptor extends AbstractModelCitizenMethodInt
 		}
 	}
 
-	private Object generateFixture(final FieldInfo field) throws CreateModelException {
-		return getModelFactory().createModel(field.getType());
+	private Object generateFixture(final FieldInfo field, final Model annotation) throws CreateModelException {
+		return getModelFactory().createModel(defineClass(field.getType(), annotation.target()));
+	}
+
+	private Class<?> defineClass(final Class<?> fieldClass, final Class<?> annotaitonClass) {
+		Class<?> result;
+
+		if (annotaitonClass.equals(Model.DEFAULT.class)) {
+			// case 1 - annotation's target is default
+			result = fieldClass;
+		} else if (fieldClass.equals(Object.class)) {
+			// case 2 - field class is object (declared with 'def')
+			result = annotaitonClass;
+		} else {
+			// case 3 - use annotation's target but check if it compatible with
+			// field's type
+			if (fieldClass.isAssignableFrom(annotaitonClass)) {
+				result = annotaitonClass;
+			} else {
+				throw new InvalidSpecException("@Model's target class <" + annotaitonClass + "> cannot be cast to field's type <" + fieldClass + ">");
+			}
+		}
+
+		return result;
 	}
 
 }
