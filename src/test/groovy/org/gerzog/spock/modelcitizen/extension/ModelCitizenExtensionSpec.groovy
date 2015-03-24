@@ -16,12 +16,13 @@
 package org.gerzog.spock.modelcitizen.extension
 
 import org.apache.commons.lang.reflect.FieldUtils
+import org.gerzog.spock.modelcitizen.api.ModelCitizenBlueprints
 import org.gerzog.spock.modelcitizen.test.SpecCompilationTrait
 import org.gerzog.spock.modelcitizen.test.TestUtilsTrait
 import org.gerzog.spock.modelcitizen.test.data.blueprints1.AnotherBeanBlueprint
 import org.gerzog.spock.modelcitizen.test.data.blueprints1.BeanBlueprint
 import org.gerzog.spock.modelcitizen.test.data.blueprints2.ThirdBeanBlueprint
-import org.gerzog.spock.modelcitizen.test.specs.TestSpecs
+import org.gerzog.spock.modelcitizen.test.specs.TestConstants
 import org.spockframework.runtime.InvalidSpecException
 import org.spockframework.runtime.extension.IMethodInterceptor
 
@@ -38,7 +39,7 @@ class ModelCitizenExtensionSpec extends Specification implements TestUtilsTrait,
 
 	def "check interceptor was added"() {
 		setup:
-		def specClass = compileSpec(TestSpecs.USE_BLUEPRINTS_WITH_CLASSES)
+		def specClass = compileSpec(TestConstants.USE_BLUEPRINTS_WITH_CLASSES)
 		def spec = spec(specClass)
 
 		when:
@@ -50,7 +51,7 @@ class ModelCitizenExtensionSpec extends Specification implements TestUtilsTrait,
 
 	def "check an interceptor was added to spec when annotation used for superclass"() {
 		setup:
-		def specClass = compileSpec(TestSpecs.SPEC_WITH_SUPER_CLASS)
+		def specClass = compileSpec(TestConstants.SPEC_WITH_SUPER_CLASS)
 		def spec = spec(specClass)
 
 		when:
@@ -74,11 +75,11 @@ class ModelCitizenExtensionSpec extends Specification implements TestUtilsTrait,
 
 		where:
 		specClassName 						| blueprintClasses
-		TestSpecs.USE_BLUEPRINTS_WITH_CLASSES 		| [
+		TestConstants.USE_BLUEPRINTS_WITH_CLASSES 		| [
 			AnotherBeanBlueprint,
 			ThirdBeanBlueprint
 		]
-		TestSpecs.USE_BLUEPRINTS_WITH_PACKAGE_SCAN	| [
+		TestConstants.USE_BLUEPRINTS_WITH_PACKAGE_SCAN	| [
 			BeanBlueprint,
 			AnotherBeanBlueprint,
 			ThirdBeanBlueprint
@@ -87,7 +88,7 @@ class ModelCitizenExtensionSpec extends Specification implements TestUtilsTrait,
 
 	def "check an exception thrown for incorrect model factory config"() {
 		when:
-		def specClass = compileSpec(TestSpecs.USE_BLUEPRINTS_WITH_NO_BLUEPRINT_CLASS)
+		def specClass = compileSpec(TestConstants.USE_BLUEPRINTS_WITH_NO_BLUEPRINT_CLASS)
 		applyExtension(specClass)
 
 		then:
@@ -96,7 +97,7 @@ class ModelCitizenExtensionSpec extends Specification implements TestUtilsTrait,
 
 	def "check an error occured for @Model applied to 'def' field"() {
 		when:
-		def specClass = compileSpec(TestSpecs.MODEL_WITH_DEF)
+		def specClass = compileSpec(TestConstants.MODEL_WITH_DEF)
 		applyExtension(specClass)
 
 		then:
@@ -105,7 +106,7 @@ class ModelCitizenExtensionSpec extends Specification implements TestUtilsTrait,
 
 	def "check method interceptor was applied"() {
 		setup:
-		def specClass = compileSpec(TestSpecs.SAMPLE_SPEC)
+		def specClass = compileSpec(TestConstants.SAMPLE_SPEC)
 		def spec = spec(specClass)
 		def fields = modelFields(spec)
 
@@ -118,7 +119,7 @@ class ModelCitizenExtensionSpec extends Specification implements TestUtilsTrait,
 
 	def "check no interceptor added for no @Model-containing spec"() {
 		setup:
-		def specClass = compileSpec(TestSpecs.NO_MODEL_SPEC)
+		def specClass = compileSpec(TestConstants.NO_MODEL_SPEC)
 		def spec = spec(specClass)
 
 		when:
@@ -130,7 +131,7 @@ class ModelCitizenExtensionSpec extends Specification implements TestUtilsTrait,
 
 	def "check trait initializer was registered"() {
 		setup:
-		def specClass = compileSpec(TestSpecs.NO_MODEL_SPEC)
+		def specClass = compileSpec(TestConstants.NO_MODEL_SPEC)
 		def spec = spec(specClass)
 
 		when:
@@ -142,7 +143,7 @@ class ModelCitizenExtensionSpec extends Specification implements TestUtilsTrait,
 
 	def "check trait initializer is first"() {
 		setup:
-		def specClass = compileSpec(TestSpecs.NO_MODEL_SPEC)
+		def specClass = compileSpec(TestConstants.NO_MODEL_SPEC)
 		def spec = spec(specClass)
 		spec.initializerInterceptors << [Mock(IMethodInterceptor)]
 
@@ -174,7 +175,7 @@ class ModelCitizenExtensionSpec extends Specification implements TestUtilsTrait,
 	}
 
 	private extractAnnotation(clazz) {
-		clazz.getAnnotation(UseBlueprints)
+		clazz.getAnnotation(ModelCitizenBlueprints)
 	}
 
 	private findModelAnnotationInterceptor(spec) {

@@ -6,4 +6,5 @@ apply plugin: 'license'
 
 license {
 	header project.file('HEADER')
+	exclude 'logback-test.xml'
 }

@@ -18,7 +18,7 @@ package org.gerzog.spock.modelcitizen.extension
 import org.gerzog.spock.modelcitizen.test.SpecCompilationTrait
 import org.gerzog.spock.modelcitizen.test.TestUtilsTrait
 import org.gerzog.spock.modelcitizen.test.data.Bean
-import org.gerzog.spock.modelcitizen.test.specs.TestSpecs
+import org.gerzog.spock.modelcitizen.test.specs.TestConstants
 import org.spockframework.runtime.InvalidSpecException
 import org.spockframework.runtime.extension.IMethodInvocation
 
@@ -37,7 +37,7 @@ class ModelCitizenMethodInterceptorSpec extends Specification implements TestUti
 
 	def invocation = Mock(IMethodInvocation)
 
-	def target = newSpec(TestSpecs.SAMPLE_SPEC)
+	def target = newSpec(TestConstants.SAMPLE_SPEC)
 
 	def model = Mock(Bean)
 
@@ -47,7 +47,7 @@ class ModelCitizenMethodInterceptorSpec extends Specification implements TestUti
 
 	def "check model factory was called for model fields initialization"() {
 		setup:
-		def specClass = compileSpec(TestSpecs.SAMPLE_SPEC)
+		def specClass = compileSpec(TestConstants.SAMPLE_SPEC)
 		def spec = spec(specClass)
 
 		when:
@@ -59,7 +59,7 @@ class ModelCitizenMethodInterceptorSpec extends Specification implements TestUti
 
 	def "check spec exception occurs if model factory raises error"() {
 		setup:
-		def specClass = compileSpec(TestSpecs.SAMPLE_SPEC)
+		def specClass = compileSpec(TestConstants.SAMPLE_SPEC)
 		def spec = spec(specClass)
 
 		when:
@@ -73,7 +73,7 @@ class ModelCitizenMethodInterceptorSpec extends Specification implements TestUti
 
 	def "check field was initialized with corresponding value"() {
 		setup:
-		def specClass = compileSpec(TestSpecs.SAMPLE_SPEC)
+		def specClass = compileSpec(TestConstants.SAMPLE_SPEC)
 		def spec = spec(specClass)
 
 		when:
@@ -87,7 +87,7 @@ class ModelCitizenMethodInterceptorSpec extends Specification implements TestUti
 
 	def "check feature method was called after model initialization"() {
 		when:
-		def specClass = compileSpec(TestSpecs.SAMPLE_SPEC)
+		def specClass = compileSpec(TestConstants.SAMPLE_SPEC)
 		callInterceptor(spec(specClass))
 
 		then:

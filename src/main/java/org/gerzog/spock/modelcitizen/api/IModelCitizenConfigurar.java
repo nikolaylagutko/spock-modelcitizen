@@ -13,16 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.gerzog.spock.modelcitizen.api
-
-import groovy.transform.AnnotationCollector
-
-import org.gerzog.spock.modelcitizen.internal.ast.ApplyModelCitizenTrait
+package org.gerzog.spock.modelcitizen.api;
 
 /**
  * @author Nikolay Lagutko (nikolay.lagutko@mail.com)
  *
  */
-@AnnotationCollector([ModelCitizenBlueprints, ApplyModelCitizenTrait])
-@interface ModelCitizen {
+public interface IModelCitizenConfigurar {
+
+	void configure(ModelCitizenBlueprints annotation, IModelCitizenBuilder builder);
+
 }

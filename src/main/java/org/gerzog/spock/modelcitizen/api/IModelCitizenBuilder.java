@@ -13,16 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.gerzog.spock.modelcitizen.api
+package org.gerzog.spock.modelcitizen.api;
 
-import groovy.transform.AnnotationCollector
-
-import org.gerzog.spock.modelcitizen.internal.ast.ApplyModelCitizenTrait
+import com.tobedevoured.modelcitizen.ModelFactory;
+import com.tobedevoured.modelcitizen.ModelFactoryException;
+import com.tobedevoured.modelcitizen.policy.Policy;
 
 /**
  * @author Nikolay Lagutko (nikolay.lagutko@mail.com)
  *
  */
-@AnnotationCollector([ModelCitizenBlueprints, ApplyModelCitizenTrait])
-@interface ModelCitizen {
+public interface IModelCitizenBuilder {
+
+	IModelCitizenBuilder withPolicies(Policy... policies);
+
+	IModelCitizenBuilder fromPackages(String... packages);
+
+	IModelCitizenBuilder fromClasses(Class<?>... classes);
+
+	ModelFactory build() throws ModelFactoryException;
+
 }

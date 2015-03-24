@@ -21,6 +21,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.gerzog.spock.modelcitizen.api.Model;
+import org.gerzog.spock.modelcitizen.api.ModelCitizenBlueprints;
 import org.spockframework.runtime.InvalidSpecException;
 import org.spockframework.runtime.extension.AbstractAnnotationDrivenExtension;
 import org.spockframework.runtime.model.FieldInfo;
@@ -38,10 +39,10 @@ import com.tobedevoured.modelcitizen.RegisterBlueprintException;
  * @author Nikolay Lagutko (nikolay.lagutko@mail.com)
  *
  */
-public class ModelCitizenExtension extends AbstractAnnotationDrivenExtension<UseBlueprints> {
+public class ModelCitizenExtension extends AbstractAnnotationDrivenExtension<ModelCitizenBlueprints> {
 
 	@Override
-	public void visitSpecAnnotation(final UseBlueprints annotation, final SpecInfo spec) {
+	public void visitSpecAnnotation(final ModelCitizenBlueprints annotation, final SpecInfo spec) {
 		final ModelFactory factory = new ModelFactory();
 
 		initializeBlueprints(factory, annotation, spec);
@@ -75,7 +76,7 @@ public class ModelCitizenExtension extends AbstractAnnotationDrivenExtension<Use
 		return spec.getAllFields().stream().filter(field -> field.isAnnotationPresent(Model.class)).collect(Collectors.toList());
 	}
 
-	private void initializeBlueprints(final ModelFactory factory, final UseBlueprints annotation, final SpecInfo spec) {
+	private void initializeBlueprints(final ModelFactory factory, final ModelCitizenBlueprints annotation, final SpecInfo spec) {
 		try {
 			// register blueprints from classes
 			factory.setRegisterBlueprints(Arrays.asList(annotation.classes()));
