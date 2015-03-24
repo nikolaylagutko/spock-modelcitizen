@@ -43,9 +43,9 @@ targetCompatibility = 1.8
 dependencies {
 	compile group: 'org.spockframework',			name: 'spock-core',	version: spockVersion
 	compile group: 'com.tobedevoured.modelcitizen',	name: 'core',		version: modelcitizenVersion
+	compile group: 'org.codehaus.groovy',			name: 'groovy-all',	version: groovyVersion
 	
 	testCompile group: 'junit',					name: 'junit',		version: junitVersion
-	testCompile group: 'org.codehaus.groovy',	name: 'groovy-all',	version: groovyVersion
 	testCompile group: 'cglib',					name: 'cglib',		version: cglibVersion
 	testCompile group: 'org.objenesis',			name: 'objenesis',	version: objenesisVersion
 }
