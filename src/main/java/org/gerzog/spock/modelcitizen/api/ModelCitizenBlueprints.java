@@ -39,16 +39,22 @@ public @interface ModelCitizenBlueprints {
 
 	/**
 	 * Classes to be registered as Blueprints
+	 *
+	 * @return classes to be registred as blueprints
 	 */
 	Class<?>[] classes() default {};
 
 	/**
 	 * Package names to scan for Blueprint classes
+	 *
+	 * @return packages to be scanned for blueprint classes
 	 */
 	String[] packagesToScan() default {};
 
 	/**
 	 * Configurar class for ModelFactory
+	 *
+	 * @return extra-configurar for Model-Citizen
 	 */
 	Class<? extends IModelCitizenConfigurar> configurar() default DefaultModelCitizenConfigurar.class;
 
